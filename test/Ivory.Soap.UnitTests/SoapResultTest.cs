@@ -30,7 +30,7 @@ namespace Ivory.Soap.UnitTests
   <SOAP-ENV:Header>
     <SimpleHeader xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
       <Message>Hello</Message>
-    </SimpleBody>
+    </SimpleHeader>
   </SOAP-ENV:Header>
   <SOAP-ENV:Body>
     <SimpleBody xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">

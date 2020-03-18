@@ -42,26 +42,29 @@ namespace Ivory.Soap
         {
             var writer = XmlWriter.Create(context?.HttpContext.Response.Body, WriterSettings);
 
-            await writer.WriteSoapElementAsync(SoapMessage.Envelope);
+            writer.WriteSoapElement(SoapMessage.Envelope);
             {
-                await writer.WriteAttributeStringAsync(SoapMessage.Prefix, "encodingStyle", SoapMessage.NS, SoapMessage.EncodingStyle);
+                writer.WriteAttributeString(SoapMessage.Prefix, "encodingStyle", SoapMessage.NS, SoapMessage.EncodingStyle);
 
                 if (Header != null)
                 {
-                    await writer.WriteSoapElementAsync(SoapMessage.Header);
+                    writer.WriteSoapElement(SoapMessage.Header);
                     {
-                        await WriteBodyAsync(writer);
+                        await WriteHeaderAsync(writer);
                     }
-                    await writer.WriteEndElementAsync();
+                    writer.WriteEndElement();
                 }
 
-                await writer.WriteSoapElementAsync(SoapMessage.Body);
+                writer.WriteSoapElement(SoapMessage.Body);
                 {
                     await WriteBodyAsync(writer);
+                    await writer.FlushAsync();
                 }
-                await writer.WriteEndElementAsync();
+                writer.WriteEndElement();
             }
-            await writer.WriteEndElementAsync();
+            writer.WriteEndElement();
+
+            await writer.FlushAsync();
         }
 
         /// <summary>Gets the <see cref="XmlWriterSettings"/> to use.</summary>

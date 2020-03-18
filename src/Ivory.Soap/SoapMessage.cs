@@ -27,9 +27,9 @@ namespace Ivory.Soap
         /// <summary>Gets the SOAP fault.</summary>
         public static readonly string Fault = nameof(Fault);
 
-        internal static Task WriteSoapElementAsync(this XmlWriter xmlWriter, string localName)
+        internal static void WriteSoapElement(this XmlWriter xmlWriter, string localName)
         {
-            return xmlWriter.WriteStartElementAsync(Prefix, localName, NS);
+            xmlWriter.WriteStartElement(Prefix, localName, NS);
         }
     }
 }
