@@ -12,13 +12,13 @@ namespace Ivory.Soap.UnitTests
         {
             var result = new SoapResult(header: null, body: new SimpleBody { Value = 17 });
 
-            await ActionResultAssert.WritesToBody(@"<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=""http://www.w3.org/2001/12/soap-encoding"" xmlns:SOAP-ENV=""http://www.w3.org/2001/12/soap-envelope"">
-  <SOAP-ENV:Body>
-    <SimpleBody xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+            await ActionResultAssert.WritesToBody(@"<Envelope p1:encodingStyle=""http://www.w3.org/2001/12/soap-encoding"" xmlns:p1=""http://www.w3.org/2001/12/soap-envelope"" xmlns=""http://www.w3.org/2001/12/soap-envelope"">
+  <Body>
+    <SimpleBody xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns="""">
       <Value>17</Value>
     </SimpleBody>
-  </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>", result);
+  </Body>
+</Envelope>", result);
         }
 
         [Test]
@@ -26,18 +26,18 @@ namespace Ivory.Soap.UnitTests
         {
             var result = new SoapResult(header: new SimpleHeader { Message = "Hello" }, body: new SimpleBody { Value = 17 });
 
-            await ActionResultAssert.WritesToBody(@"<SOAP-ENV:Envelope SOAP-ENV:encodingStyle=""http://www.w3.org/2001/12/soap-encoding"" xmlns:SOAP-ENV=""http://www.w3.org/2001/12/soap-envelope"">
-  <SOAP-ENV:Header>
-    <SimpleHeader xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+            await ActionResultAssert.WritesToBody(@"<Envelope p1:encodingStyle=""http://www.w3.org/2001/12/soap-encoding"" xmlns:p1=""http://www.w3.org/2001/12/soap-envelope"" xmlns=""http://www.w3.org/2001/12/soap-envelope"">
+  <Header>
+    <SimpleHeader xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns="""">
       <Message>Hello</Message>
     </SimpleHeader>
-  </SOAP-ENV:Header>
-  <SOAP-ENV:Body>
-    <SimpleBody xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  </Header>
+  <Body>
+    <SimpleBody xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns="""">
       <Value>17</Value>
     </SimpleBody>
-  </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>", result);
+  </Body>
+</Envelope>", result);
         }
     }
 }

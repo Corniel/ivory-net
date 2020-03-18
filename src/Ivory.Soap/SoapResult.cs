@@ -40,27 +40,15 @@ namespace Ivory.Soap
         /// </param>
         public async Task ExecuteResultAsync(ActionContext context)
         {
-            var writer = XmlWriter.Create(context?.HttpContext.Response.Body, WriterSettings);
+            var settings = WriterSettings;
 
-            writer.WriteSoapElement(SoapMessage.Envelope);
+            var writer = XmlWriter.Create(context?.HttpContext.Response.Body, settings);
+
+            writer.WriteSoapEnvelopeElement(settings);
             {
-                writer.WriteAttributeString(SoapMessage.Prefix, "encodingStyle", SoapMessage.NS, SoapMessage.EncodingStyle);
-
-                if (Header != null)
-                {
-                    writer.WriteSoapElement(SoapMessage.Header);
-                    {
-                        await WriteHeaderAsync(writer);
-                    }
-                    writer.WriteEndElement();
-                }
-
-                writer.WriteSoapElement(SoapMessage.Body);
-                {
-                    await WriteBodyAsync(writer);
-                    await writer.FlushAsync();
-                }
-                writer.WriteEndElement();
+                writer
+                    .WriteSoapHeader(Header, settings)
+                    .WriteSoapBody(Body, settings);
             }
             writer.WriteEndElement();
 
@@ -68,53 +56,6 @@ namespace Ivory.Soap
         }
 
         /// <summary>Gets the <see cref="XmlWriterSettings"/> to use.</summary>
-        protected virtual XmlWriterSettings WriterSettings
-        {
-            get => new XmlWriterSettings
-            {
-                OmitXmlDeclaration = true,
-                Async = true,
-                CloseOutput = false,
-                Encoding = new UTF8Encoding(false),
-                Indent = true,
-                IndentChars = "  ",
-            };
-        }
-
-        /// <summary>Writes the SOAP header.</summary>
-        /// <param name="writer">
-        /// The <see cref="XmlWriter"/> to write to.
-        /// </param>
-        protected virtual Task WriteHeaderAsync(XmlWriter writer)
-        {
-            return WriteContentAsync(writer, Header);
-        }
-
-        /// <summary>Writes the SOAP body.</summary>
-        /// <param name="writer">
-        /// The <see cref="XmlWriter"/> to write to.
-        /// </param>
-        protected virtual Task WriteBodyAsync(XmlWriter writer)
-        {
-            return WriteContentAsync(writer, Body);
-        }
-
-        private static Task WriteContentAsync(XmlWriter writer, object content)
-        {
-            if (content is null)
-            {
-                // write nothing.
-            }
-            else if (content is IXmlSerializable xml)
-            {
-                xml.WriteXml(writer);
-            }
-            else
-            {
-                var serializer = new XmlSerializer(content.GetType());
-                serializer.Serialize(writer, content);
-            }
-            return Task.CompletedTask;
-        }
+        protected virtual SoapWriterSettings WriterSettings => new SoapWriterSettings();
     }
 }
