@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.IO;
 using System.Text;
 using System.Xml;
 
@@ -26,7 +27,7 @@ namespace Ivory.Soap
         public string NewLineChars { get; set; } = Environment.NewLine;
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the System.Xml.XmlWriter should remove
+        /// Gets or sets a value that indicates whether the <see cref="XmlWriter"/> should remove
         /// duplicate namespace declarations when writing XML content. The default behavior
         /// is for the writer to output all namespace declarations that are present in the
         /// writer's namespace resolver.
@@ -35,7 +36,7 @@ namespace Ivory.Soap
 
         /// <summary>
         /// Gets or sets the character string to use when indenting. This setting is used
-        /// when the System.Xml.XmlWriterSettings.Indent property is set to true.
+        /// when the <see cref="XmlWriter"/>Settings.Indent property is set to true.
         /// </summary>
         public string IndentChars { get; set; } = "  ";
 
@@ -46,7 +47,7 @@ namespace Ivory.Soap
         public Encoding Encoding { get; set; } = new UTF8Encoding(false);
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the System.Xml.XmlWriter does not
+        /// Gets or sets a value that indicates whether the <see cref="XmlWriter"/> does not
         /// escape URI attributes.
         /// </summary>
         public bool DoNotEscapeUriAttributes { get; set; }
@@ -55,9 +56,9 @@ namespace Ivory.Soap
         public ConformanceLevel ConformanceLevel { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether the System.Xml.XmlWriter should also
-        ///     close the underlying stream or System.IO.TextWriter when the System.Xml.XmlWriter.Close
-        ///     method is called.
+        /// Gets or sets a value indicating whether the <see cref="XmlWriter"/> should also
+        /// close the underlying stream or <see cref="TextWriter"/> when the <see cref="XmlWriter"/>.Close
+        /// method is called.
         /// </summary>
         public bool CloseOutput { get; set; }
 
@@ -69,14 +70,14 @@ namespace Ivory.Soap
         public bool CheckCharacters { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets a value that indicates whether asynchronous System.Xml.XmlWriter
-        /// methods can be used on a particular System.Xml.XmlWriter instance.
+        /// Gets or sets a value that indicates whether asynchronous <see cref="XmlWriter"/>
+        /// methods can be used on a particular <see cref="XmlWriter"/> instance.
         /// </summary>
         public bool Async { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets a value that indicates whether the System.Xml.XmlWriter will add
-        /// closing tags to all unclosed element tags when the System.Xml.XmlWriter.Close
+        /// Gets or sets a value that indicates whether the <see cref="XmlWriter"/> will add
+        /// closing tags to all unclosed element tags when the <see cref="XmlWriter.Close()"/>
         /// method is called.
         /// </summary>
         public bool WriteEndDocumentOnClose { get; set; } = true;

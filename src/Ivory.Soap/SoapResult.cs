@@ -2,11 +2,8 @@
 // Nested code is used here to make the XML Writing more readable.
 
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Serialization;
 
 namespace Ivory.Soap
 {
