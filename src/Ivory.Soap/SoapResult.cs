@@ -72,7 +72,7 @@ namespace Ivory.Soap
                 OmitXmlDeclaration = true,
                 Async = true,
                 CloseOutput = false,
-                Encoding = Encoding.UTF8,
+                Encoding = new UTF8Encoding(false),
                 Indent = true,
                 IndentChars = "  ",
             };
