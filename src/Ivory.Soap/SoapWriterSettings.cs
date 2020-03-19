@@ -8,8 +8,8 @@ namespace Ivory.Soap
     /// <summary>Specifies a set of features to support writing SOAP messages.</summary>
     public class SoapWriterSettings
     {
-        /// <summary>Gets or sets the namespace prefix for the <see cref="SoapMessage.NS"/>./summary>
-        public string NamspacePrefix { get; set; } = string.Empty;
+        /// <summary>Gets or sets the namespace prefix for the <see cref="SoapMessage.NsSoap11Envelop"/>.</summary>
+        public string NamespacePrefix { get; set; } = string.Empty;
 
         /// <summary>Gets or sets a value indicating whether to omit an XML declaration.</summary>
         public bool OmitXmlDeclaration { get; set; } = true;
@@ -85,14 +85,14 @@ namespace Ivory.Soap
             {
                 OmitXmlDeclaration = OmitXmlDeclaration,
                 NewLineOnAttributes = NewLineOnAttributes,
-                 NewLineHandling =  NewLineHandling,
+                NewLineHandling = NewLineHandling,
                 NewLineChars = NewLineChars,
-                 NamespaceHandling =  NamespaceHandling,
+                NamespaceHandling = NamespaceHandling,
                 IndentChars = IndentChars,
                 Indent = Indent,
-                 Encoding =  Encoding,
+                Encoding = Encoding,
                 DoNotEscapeUriAttributes = DoNotEscapeUriAttributes,
-                 ConformanceLevel =  ConformanceLevel,
+                ConformanceLevel = ConformanceLevel,
                 CloseOutput = CloseOutput,
                 CheckCharacters = CheckCharacters,
                 Async = Async,

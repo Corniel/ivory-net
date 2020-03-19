@@ -10,7 +10,8 @@ namespace Ivory.Soap.Modelbinding
     /// <summary>Implementation of an <see cref="IModelBinder"/> for SOAP.</summary>
     public class SoapModelBinder : IModelBinder, IModelBinderProvider
     {
-        private static readonly XNamespace NS = XNamespace.Get(SoapMessage.NS);
+        private static readonly XNamespace NsSoap11Envelop = XNamespace.Get(SoapMessage.NsSoap11Envelop);
+        private static readonly XNamespace NsSoap12Envelop = XNamespace.Get(SoapMessage.NsSoap12Envelop);
         private static readonly string envelope = nameof(envelope);
         private static readonly string header = nameof(header);
         private static readonly string body = nameof(body);
@@ -94,14 +95,18 @@ namespace Ivory.Soap.Modelbinding
 
         private static XElement GetSoapHeader(XElement soapRequest)
         {
-            return Guard.NotNull(soapRequest, nameof(SaveOptions))
-                .Element(NS + SoapMessage.Header)?.Elements().FirstOrDefault();
+            Guard.NotNull(soapRequest, nameof(SaveOptions));
+            var soapHeader = soapRequest.Element(NsSoap11Envelop + SoapMessage.Header)
+                          ?? soapRequest.Element(NsSoap12Envelop + SoapMessage.Header);
+            return soapHeader?.Elements().FirstOrDefault();
         }
 
         private static XElement GetSoapBody(XElement soapRequest)
         {
-            return Guard.NotNull(soapRequest, nameof(SaveOptions))
-                .Element(NS + SoapMessage.Body)?.Elements().FirstOrDefault();
+            Guard.NotNull(soapRequest, nameof(SaveOptions));
+            var soapBody = soapRequest.Element(NsSoap11Envelop + SoapMessage.Body)
+                        ?? soapRequest.Element(NsSoap12Envelop + SoapMessage.Body);
+            return soapBody.Elements().FirstOrDefault();
         }
 
         private static object Deserialize(XNode node, Type type)
