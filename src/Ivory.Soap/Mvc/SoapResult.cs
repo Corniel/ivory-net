@@ -2,10 +2,11 @@
 // Nested code is used here to make the XML Writing more readable.
 
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Ivory.Soap
+namespace Ivory.Soap.Mvc
 {
     /// <summary>Represents a SOAP envelope <see cref="IActionResult"/>.</summary>
     public class SoapResult : IActionResult
@@ -37,9 +38,12 @@ namespace Ivory.Soap
         /// </param>
         public Task ExecuteResultAsync(ActionContext context)
         {
-            var settings = WriterSettings;
+            Guard.NotNull(context, nameof(context));
 
-            var writer = XmlWriter.Create(context?.HttpContext.Response.Body, settings);
+            var settings = WriterSettings;
+            var buffer = new MemoryStream();
+
+            var writer = XmlWriter.Create(buffer, settings);
 
             writer.WriteSoapEnvelopeElement(settings);
             {
@@ -49,7 +53,10 @@ namespace Ivory.Soap
             }
             writer.WriteEndElement();
 
-            return writer.FlushAsync();
+            writer.Flush();
+            buffer.Position = 0;
+
+            return buffer.CopyToAsync(context.HttpContext.Response.Body);
         }
 
         /// <summary>Gets the <see cref="SoapWriterSettings"/> to use.</summary>

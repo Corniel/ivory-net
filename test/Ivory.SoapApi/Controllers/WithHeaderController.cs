@@ -1,5 +1,4 @@
-﻿using Ivory.Soap;
-using Ivory.Soap.SoapApi.Models;
+﻿using Ivory.Soap.Mvc;
 using Ivory.SoapApi.Models;
 using Microsoft.AspNetCore.Mvc;
 

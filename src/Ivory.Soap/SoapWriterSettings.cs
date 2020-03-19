@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Xml;
 
 namespace Ivory.Soap
 {
-    /// <summary>
-    /// Specifies a set of features to support on the <see cref="SoapResult.ExecuteResultAsync(ActionContext)"/> method..
-    /// </summary>
+    /// <summary>Specifies a set of features to support writing SOAP messages.</summary>
     public class SoapWriterSettings
     {
         /// <summary>Gets or sets the namespace prefix for the <see cref="SoapMessage.NS"/>./summary>
@@ -73,7 +70,7 @@ namespace Ivory.Soap
         /// Gets or sets a value that indicates whether asynchronous <see cref="XmlWriter"/>
         /// methods can be used on a particular <see cref="XmlWriter"/> instance.
         /// </summary>
-        public bool Async { get; set; } = false;
+        public bool Async { get; set; }
 
         /// <summary>
         /// Gets or sets a value that indicates whether the <see cref="XmlWriter"/> will add

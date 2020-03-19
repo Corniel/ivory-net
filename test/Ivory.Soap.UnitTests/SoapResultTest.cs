@@ -1,4 +1,4 @@
-﻿using Ivory.Soap.SoapApi.Models;
+﻿using Ivory.Soap.Mvc;
 using Ivory.Soap.UnitTests.TestTools;
 using Ivory.SoapApi.Models;
 using NUnit.Framework;

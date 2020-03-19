@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Ivory.Soap
+namespace Ivory.Soap.Http
 {
     /// <summary>Represents a SOAP envelope <see cref="HttpContent"/>.</summary>
     public class SoapHttpContent : HttpContent
@@ -28,16 +28,13 @@ namespace Ivory.Soap
         public object Body { get; }
 
         /// <inheritdoc/>
-        protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context)
+        protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             Guard.NotNull(stream, nameof(stream));
 
             var settings = WriterSettings;
 
-            // Stream does not support sync writing.
-            var buffer = new MemoryStream();
-
-            var writer = XmlWriter.Create(buffer, settings);
+            var writer = XmlWriter.Create(stream, settings);
 
             writer
                 .WriteSoapEnvelopeElement(settings)
@@ -45,10 +42,9 @@ namespace Ivory.Soap
                 .WriteSoapBody(Body, settings)
                 .WriteEndElement();
 
-            await writer.FlushAsync();
-            buffer.Position = 0;
+            writer.Flush();
 
-            await buffer.CopyToAsync(stream);
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc/>

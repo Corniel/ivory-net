@@ -1,4 +1,5 @@
-﻿using Ivory.SoapApi;
+﻿using Ivory.Soap.Http;
+using Ivory.SoapApi;
 using Ivory.SoapApi.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
@@ -20,6 +21,8 @@ namespace Ivory.Soap.UnitTests
                 header: null,
                 body: new SimpleBody(),
                 cancellationToken: default);
+
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
         }
     }
 }

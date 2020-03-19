@@ -1,12 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace Ivory.Soap.Modelbinding
 {
     /// <summary>Implementation of an <see cref="IModelBinder"/> for SOAP.</summary>
     public class SoapModelBinder : IModelBinder, IModelBinderProvider
     {
+        private static readonly XNamespace NS = XNamespace.Get(SoapMessage.NS);
+        private static readonly string envelope = nameof(envelope);
+        private static readonly string header = nameof(header);
+        private static readonly string body = nameof(body);
+
         /// <inheritdoc/>
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
@@ -24,35 +32,98 @@ namespace Ivory.Soap.Modelbinding
                 return;
             }
 
+            var isHeader = bindingContext.FieldName == header;
+
+            if (!isHeader && bindingContext.FieldName != body)
+            {
+                return;
+            }
+
+            var xEnvelope = await GetSoapEnvelopeAsync(bindingContext);
+
+            if (xEnvelope is null)
+            {
+                return;
+            }
+
+            var xContent = isHeader
+                ? GetSoapHeader(xEnvelope)
+                : GetSoapBody(xEnvelope);
+
+            object model;
+
             try
             {
-                var soapRequest = await bindingContext.HttpContext.GetSoapRequestAsync();
-
-                var isHeader = bindingContext.FieldName == "header";
-
-                var node = isHeader
-                    ? soapRequest.GetSoapHeader()
-                    : soapRequest.GetSoapBody();
-
-                var model = node.Deserialize(bindingContext.ModelType);
-
-                if (isHeader || model != null)
-                {
-                    bindingContext.Result = ModelBindingResult.Success(model);
-                    return;
-                }
-                else
-                {
-                    bindingContext.ModelState.AddModelError(bindingContext.ModelName, "SOAP body is missing.");
-                }
+                model = Deserialize(xContent, bindingContext.ModelType);
             }
             catch (Exception x)
             {
                 bindingContext.ModelState.AddModelError(bindingContext.ModelName, x.Message);
+                return;
             }
 
-            bindingContext.Result = ModelBindingResult.Failed();
+            if (!isHeader && model is null)
+            {
+                bindingContext.ModelState.AddModelError(bindingContext.ModelName, "SOAP body is missing.");
+                bindingContext.Result = ModelBindingResult.Failed();
+                return;
+            }
+            bindingContext.Result = ModelBindingResult.Success(model);
+        }
 
+        private static async Task<XElement> GetSoapEnvelopeAsync(ModelBindingContext bindingContext)
+        {
+            if (bindingContext.ModelState.TryGetValue(envelope, out var entry))
+            {
+                return (XElement)entry.RawValue;
+            }
+
+            var stream = bindingContext.HttpContext.Request.Body;
+            try
+            {
+                var root = await XElement.LoadAsync(stream, LoadOptions.PreserveWhitespace, default);
+                bindingContext.ModelState.SetModelValue(envelope, root, string.Empty);
+                return root;
+            }
+            catch
+            {
+                bindingContext.Result = ModelBindingResult.Failed();
+            }
+            return null;
+        }
+
+        private static XElement GetSoapHeader(XElement soapRequest)
+        {
+            return Guard.NotNull(soapRequest, nameof(SaveOptions))
+                .Element(NS + SoapMessage.Header)?.Elements().FirstOrDefault();
+        }
+
+        private static XElement GetSoapBody(XElement soapRequest)
+        {
+            return Guard.NotNull(soapRequest, nameof(SaveOptions))
+                .Element(NS + SoapMessage.Body)?.Elements().FirstOrDefault();
+        }
+
+        private static object Deserialize(XNode node, Type type)
+        {
+            if (node is null)
+            {
+                return null;
+            }
+            if (node.GetType() == type)
+            {
+                return node;
+            }
+            var reader = node.CreateReader();
+
+            if (typeof(IXmlSerializable).IsAssignableFrom(type))
+            {
+                var xmlSerializable = (IXmlSerializable)Activator.CreateInstance(type);
+                xmlSerializable.ReadXml(reader);
+                return xmlSerializable;
+            }
+            var serializer = new XmlSerializer(type);
+            return serializer.Deserialize(reader);
         }
     }
 }

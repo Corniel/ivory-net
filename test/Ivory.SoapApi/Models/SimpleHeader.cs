@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ivory.Soap.SoapApi.Models
+namespace Ivory.SoapApi.Models
 {
     [Serializable]
     public class SimpleHeader

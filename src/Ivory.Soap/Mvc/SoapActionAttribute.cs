@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using System;
 
-namespace Ivory.Soap
+namespace Ivory.Soap.Mvc
 {
     /// <summary>Represents a SOAP action method.</summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
@@ -24,8 +24,9 @@ namespace Ivory.Soap
         {
             Guard.NotNull(context, nameof(context));
 
-            return context.RouteContext.HttpContext.TryGetSoapAction(out var action) == 1
-                && Action == action;
+            return context.RouteContext.HttpContext.Request.Headers.TryGetValue(SoapMessage.SOAPAction, out var values)
+                && values.Count == 1
+                && values[0] == Action;
         }
 
         /// <inheritdoc/>
