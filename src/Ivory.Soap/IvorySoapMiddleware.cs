@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Ivory.Soap
 {
@@ -20,10 +18,27 @@ namespace Ivory.Soap
         {
             Guard.NotNull(context, nameof(context));
 
-            var soapAction = context.Request.Headers[SoapClient.SOAPAction];
+            switch (context.TryGetSoapAction(out var soapAction))
+            {
+                case 0:
+                    await CallNextModuleIfPresent(context);
+                    return;
+                case 1:
+                    break;
+                default:
+                    // bad request. multiple SOAPActions
+                    break;
+            }
 
-            // TODO: implement.
-            throw new NotImplementedException($"Could not resolve SOAPAction: {soapAction}");
+            var soapRequest = await context.GetSoapRequestAsync();
+
+            if (soapRequest is null)
+            {
+                // bad request. invalid SOAP
+            }
+
+            var header = soapRequest.GetSoapHeader(typeof(XElement));
+            var body = soapRequest.GetSoapBody(typeof(XElement));
 
             await CallNextModuleIfPresent(context);
         }

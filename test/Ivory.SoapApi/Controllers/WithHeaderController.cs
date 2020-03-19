@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ivory.SoapApi.Controllers
 {
+    [Route("/")]
+    [ApiController]
     public class WithHeaderController : ControllerBase
     {
         [SoapAction(action: "http://ivory.net/with-header", reply: "http://ivory.net/with-header/reply")]
