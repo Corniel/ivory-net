@@ -8,6 +8,10 @@
 		<CodeAnalysisRuleSet>..\..\rules\production.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.5.0.15942">
