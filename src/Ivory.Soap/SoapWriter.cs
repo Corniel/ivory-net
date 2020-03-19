@@ -17,7 +17,7 @@ namespace Ivory.Soap
         {
             Guard.NotNull(xmlWriter, nameof(xmlWriter))
                 .WriteSoapElement(SoapMessage.Envelope, settings)
-                .WriteAttributeString(settings?.NamspacePrefix, "encodingStyle", SoapMessage.NS, SoapMessage.EncodingStyle);
+                .WriteAttributeString(settings?.NamespacePrefix, "encodingStyle", SoapMessage.NsSoap11Envelop, SoapMessage.EncodingStyleSoap11);
             return xmlWriter;
         }
 
@@ -93,7 +93,7 @@ namespace Ivory.Soap
 
         private static XmlWriter WriteSoapElement(this XmlWriter xmlWriter, string localName, SoapWriterSettings settings)
         {
-            xmlWriter.WriteStartElement(settings?.NamspacePrefix, localName, SoapMessage.NS);
+            xmlWriter.WriteStartElement(settings?.NamespacePrefix, localName, SoapMessage.NsSoap11Envelop);
             return xmlWriter;
         }
 

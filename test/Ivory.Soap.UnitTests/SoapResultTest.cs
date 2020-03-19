@@ -13,7 +13,7 @@ namespace Ivory.Soap.UnitTests
         {
             var result = new SoapResult(header: null, body: new SimpleBody { Value = 17 });
 
-            await ActionResultAssert.WritesToBody(@"<Envelope p1:encodingStyle=""http://www.w3.org/2001/12/soap-encoding"" xmlns:p1=""http://www.w3.org/2001/12/soap-envelope"" xmlns=""http://www.w3.org/2001/12/soap-envelope"">
+            await ActionResultAssert.WritesToBody(@"<Envelope p1:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:p1=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns=""http://schemas.xmlsoap.org/soap/envelope/"">
   <Body>
     <SimpleBody xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns="""">
       <Value>17</Value>
@@ -27,7 +27,7 @@ namespace Ivory.Soap.UnitTests
         {
             var result = new SoapResult(header: new SimpleHeader { Message = "Hello" }, body: new SimpleBody { Value = 17 });
 
-            await ActionResultAssert.WritesToBody(@"<Envelope p1:encodingStyle=""http://www.w3.org/2001/12/soap-encoding"" xmlns:p1=""http://www.w3.org/2001/12/soap-envelope"" xmlns=""http://www.w3.org/2001/12/soap-envelope"">
+            await ActionResultAssert.WritesToBody(@"<Envelope p1:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:p1=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns=""http://schemas.xmlsoap.org/soap/envelope/"">
   <Header>
     <SimpleHeader xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns="""">
       <Message>Hello</Message>

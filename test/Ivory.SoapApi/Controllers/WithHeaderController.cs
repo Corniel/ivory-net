@@ -1,6 +1,7 @@
 ﻿using Ivory.Soap.Mvc;
 using Ivory.SoapApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 namespace Ivory.SoapApi.Controllers
 {
@@ -18,6 +19,12 @@ namespace Ivory.SoapApi.Controllers
         public IActionResult WithoutHeader(SimpleBody body)
         {
             body.Value++;
+            return new SoapResult(header: null, body: body);
+        }
+
+        [SoapAction("http://ivory.net/xml")]
+        public IActionResult Xml(XElement body)
+        {
             return new SoapResult(header: null, body: body);
         }
     }

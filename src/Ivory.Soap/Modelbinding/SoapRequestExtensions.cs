@@ -25,6 +25,5 @@ namespace Ivory.Soap.Modelbinding
             }
             return 0;
         }
-
     }
 }
