@@ -73,7 +73,7 @@ namespace Ivory.Soap
         /// Gets or sets a value that indicates whether asynchronous <see cref="XmlWriter"/>
         /// methods can be used on a particular <see cref="XmlWriter"/> instance.
         /// </summary>
-        public bool Async { get; set; } = true;
+        public bool Async { get; set; } = false;
 
         /// <summary>
         /// Gets or sets a value that indicates whether the <see cref="XmlWriter"/> will add

@@ -6,14 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ivory.SoapApi.Controllers
 {
     [Route("/")]
-    [ApiController]
     public class WithHeaderController : ControllerBase
     {
-        [SoapAction(action: "http://ivory.net/with-header", reply: "http://ivory.net/with-header/reply")]
+        [SoapAction("http://ivory.net/with-header")]
         public IActionResult WithHeader(SimpleHeader header, SimpleBody body)
         {
             body.Value++;
             return new SoapResult(header: header, body: body);
+        }
+
+        [SoapAction("http://ivory.net/without-header")]
+        public IActionResult WithoutHeader(SimpleBody body)
+        {
+            body.Value++;
+            return new SoapResult(header: null, body: body);
         }
     }
 }

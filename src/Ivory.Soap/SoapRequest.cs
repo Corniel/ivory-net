@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -28,32 +30,45 @@ namespace Ivory.Soap
 
         public static async Task<XElement> GetSoapRequestAsync(this HttpContext httpContext)
         {
+            Guard.NotNull(httpContext, nameof(httpContext));
+
             try
             {
+                var body = httpContext.Request.Body;
+                if (!body.CanSeek)
+                {
+                    var buffer = new MemoryStream();
+                    await body.CopyToAsync(buffer);
+                    httpContext.Request.Body = buffer;
+                    buffer.Position = 0;
+                }
+
                 return await XElement.LoadAsync(httpContext.Request.Body, LoadOptions.PreserveWhitespace, default);
             }
             catch
             {
                 return null;
             }
+            finally
+            {
+                httpContext.Request.Body.Position = 0;
+            }
 
         }
 
-        public static object GetSoapHeader(this XElement soapRequest, Type headerType)
+        public static XElement GetSoapHeader(this XElement soapRequest)
         {
             return Guard.NotNull(soapRequest, nameof(SaveOptions))
-                .Element(NS + SoapMessage.Header)
-                .Deserialize(headerType);
+                .Element(NS + SoapMessage.Header)?.Elements().FirstOrDefault();
         }
 
-        public static object GetSoapBody(this XElement soapRequest, Type headerType)
+        public static XElement GetSoapBody(this XElement soapRequest)
         {
             return Guard.NotNull(soapRequest, nameof(SaveOptions))
-                .Element(NS + SoapMessage.Body)
-                .Deserialize(headerType);
+                .Element(NS + SoapMessage.Body)?.Elements().FirstOrDefault();
         }
 
-        private static object Deserialize(this XNode node, Type type)
+        public static object Deserialize(this XNode node, Type type)
         {
             if (node is null)
             {

@@ -28,23 +28,27 @@ namespace Ivory.Soap
         public object Body { get; }
 
         /// <inheritdoc/>
-        protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
+        protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             Guard.NotNull(stream, nameof(stream));
 
             var settings = WriterSettings;
 
-            var writer = XmlWriter.Create(stream, settings);
+            // Stream does not support sync writing.
+            var buffer = new MemoryStream();
 
-            writer.WriteSoapEnvelopeElement(settings);
-            {
-                writer
-                    .WriteSoapHeader(Header, settings)
-                    .WriteSoapBody(Body, settings);
-            }
-            writer.WriteEndElement();
+            var writer = XmlWriter.Create(buffer, settings);
 
-            return writer.FlushAsync();
+            writer
+                .WriteSoapEnvelopeElement(settings)
+                .WriteSoapHeader(Header, settings)
+                .WriteSoapBody(Body, settings)
+                .WriteEndElement();
+
+            await writer.FlushAsync();
+            buffer.Position = 0;
+
+            await buffer.CopyToAsync(stream);
         }
 
         /// <inheritdoc/>

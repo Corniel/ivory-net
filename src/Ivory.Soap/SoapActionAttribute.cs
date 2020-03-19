@@ -14,30 +14,21 @@ namespace Ivory.Soap
         /// <param name="action">
         /// The SOAP action.
         /// </param>
-        /// <param name="reply">
-        /// The SOAP reply action.
-        /// </param>
-        public SoapActionAttribute(string action, string reply)
-        {
-            Action = action;
-            Reply = reply;
-        }
+        public SoapActionAttribute(string action) => Action = action;
 
         /// <summary>Gets the SOAP action.</summary>
         public string Action { get; }
 
-        /// <summary>Gets the SOAP reply action.</summary>
-        public string Reply { get; }
-
-        public int Order => 0;
-
+        /// <inheritdoc/>
         public bool Accept(ActionConstraintContext context)
         {
+            Guard.NotNull(context, nameof(context));
+
             return context.RouteContext.HttpContext.TryGetSoapAction(out var action) == 1
                 && Action == action;
         }
 
         /// <inheritdoc/>
-        public override string ToString() => $"Action: {Action}, Reply: {Reply}";
+        public override string ToString() => $"SOAPAction: {Action}";
     }
 }

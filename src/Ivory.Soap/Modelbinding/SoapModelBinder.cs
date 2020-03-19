@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 
 namespace Ivory.Soap.Modelbinding
 {
@@ -17,53 +14,45 @@ namespace Ivory.Soap.Modelbinding
         }
 
         /// <inheritdoc/>
-        public Task BindModelAsync(ModelBindingContext bindingContext)
+        public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
             Guard.NotNull(bindingContext, nameof(bindingContext));
 
             // This binder is only suited for SOAP requests.
             if (!bindingContext.HttpContext.IsSoapRequest())
             {
-                return Task.CompletedTask;
+                return;
             }
-
-            var isHeader = bindingContext.ModelName == "header";
-            var reader = XmlReader.Create(bindingContext.HttpContext.Request.Body, ReaderSettings);
-
-            reader.ReadToFollowing(isHeader ? SoapMessage.Header : SoapMessage.Body, SoapMessage.NS);
 
             try
             {
-                if (typeof(IXmlSerializable).IsAssignableFrom(bindingContext.ModelType))
+                var soapRequest = await bindingContext.HttpContext.GetSoapRequestAsync();
+
+                var isHeader = bindingContext.FieldName == "header";
+
+                var node = isHeader
+                    ? soapRequest.GetSoapHeader()
+                    : soapRequest.GetSoapBody();
+
+                var model = node.Deserialize(bindingContext.ModelType);
+
+                if (isHeader || model != null)
                 {
-                    var xmlSerializable = (IXmlSerializable)Activator.CreateInstance(bindingContext.ModelType);
-                    xmlSerializable.ReadXml(reader);
-                    bindingContext.Result = ModelBindingResult.Success(xmlSerializable);
+                    bindingContext.Result = ModelBindingResult.Success(model);
+                    return;
                 }
                 else
                 {
-                    var serializer = new XmlSerializer(bindingContext.ModelType);
-                    bindingContext.Result = ModelBindingResult.Success(serializer.Deserialize(reader));
+                    bindingContext.ModelState.AddModelError(bindingContext.ModelName, "SOAP body is missing.");
                 }
             }
             catch (Exception x)
             {
                 bindingContext.ModelState.AddModelError(bindingContext.ModelName, x.Message);
-                bindingContext.Result = ModelBindingResult.Failed();
             }
-            return Task.CompletedTask;
-        }
 
-        private static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings
-        {
-            Async = true,
-            CloseInput = false,
-            IgnoreComments = true,
-            IgnoreWhitespace = true,
-            IgnoreProcessingInstructions = true,
-            CheckCharacters = false,
-            ConformanceLevel = ConformanceLevel.Fragment,
-            ValidationFlags = XmlSchemaValidationFlags.None,
-        };
+            bindingContext.Result = ModelBindingResult.Failed();
+
+        }
     }
 }
