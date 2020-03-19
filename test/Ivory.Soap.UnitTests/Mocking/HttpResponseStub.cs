@@ -9,13 +9,13 @@ namespace Ivory.Soap.UnitTests.Mocking
     {
         public override HttpContext HttpContext => throw new NotImplementedException();
 
-        public override int StatusCode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override int StatusCode {get;set;}
 
         public override IHeaderDictionary Headers => throw new NotImplementedException();
 
         public override Stream Body { get; set; } = new MemoryStream();
-        public override long? ContentLength { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public override string ContentType { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override long? ContentLength {get;set;}
+        public override string ContentType {get;set;}
 
         public override IResponseCookies Cookies => throw new NotImplementedException();
 

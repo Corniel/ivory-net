@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ivory.Soap.UnitTests.Models
+namespace Ivory.SoapApi.Models
 {
     [Serializable]
     public class SimpleBody

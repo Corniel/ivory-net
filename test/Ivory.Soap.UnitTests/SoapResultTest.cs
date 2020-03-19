@@ -1,5 +1,6 @@
-﻿using Ivory.Soap.UnitTests.Models;
+﻿using Ivory.Soap.SoapApi.Models;
 using Ivory.Soap.UnitTests.TestTools;
+using Ivory.SoapApi.Models;
 using NUnit.Framework;
 using System.Threading.Tasks;
 

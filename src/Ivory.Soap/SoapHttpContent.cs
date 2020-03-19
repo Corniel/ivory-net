@@ -1,45 +1,40 @@
-#pragma warning disable S1199 // Nested code blocks should not be used
-// Nested code is used here to make the XML Writing more readable.
-
-using Microsoft.AspNetCore.Mvc;
+﻿using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 
 namespace Ivory.Soap
 {
-    /// <summary>Represents a SOAP envelope <see cref="IActionResult"/>.</summary>
-    public class SoapResult : IActionResult
+    /// <summary>Represents a SOAP envelope <see cref="HttpContent"/>.</summary>
+    public class SoapHttpContent : HttpContent
     {
-        /// <summary>Initializes a new instance of the <see cref="SoapResult"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="SoapHttpContent"/> class.</summary>
         /// <param name="header">
         /// The SOAP header.
         /// </param>
         /// <param name="body">
         /// The SOAP body.
         /// </param>
-        public SoapResult(object header, object body)
+        public SoapHttpContent(object header, object body)
         {
             Header = header;
             Body = body;
         }
-
         /// <summary>Gets the SOAP header.</summary>
         public object Header { get; }
 
         /// <summary>Gets the SOAP body.</summary>
         public object Body { get; }
 
-        /// <summary>Writes the SOAP message asynchronously to the response.</summary>
-        /// <param name="context">
-        /// The context in which the result is executed. The context information
-        /// includes information about the action that was executed and request
-        /// information.
-        /// </param>
-        public Task ExecuteResultAsync(ActionContext context)
+        /// <inheritdoc/>
+        protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
+            Guard.NotNull(stream, nameof(stream));
+
             var settings = WriterSettings;
 
-            var writer = XmlWriter.Create(context?.HttpContext.Response.Body, settings);
+            var writer = XmlWriter.Create(stream, settings);
 
             writer.WriteSoapEnvelopeElement(settings);
             {
@@ -50,6 +45,13 @@ namespace Ivory.Soap
             writer.WriteEndElement();
 
             return writer.FlushAsync();
+        }
+
+        /// <inheritdoc/>
+        protected override bool TryComputeLength(out long length)
+        {
+            length = default;
+            return false;
         }
 
         /// <summary>Gets the <see cref="SoapWriterSettings"/> to use.</summary>
