@@ -11,6 +11,8 @@ namespace Ivory.Soap
         /// <summary>Gets or sets the namespace prefix for the <see cref="SoapMessage.NsSoap11Envelop"/>.</summary>
         public string NamespacePrefix { get; set; } = string.Empty;
 
+        public SoapVersion SoapVersion { get; set; } = SoapVersion.v1_1;
+
         /// <summary>Gets or sets a value indicating whether to omit an XML declaration.</summary>
         public bool OmitXmlDeclaration { get; set; } = true;
 

@@ -1,33 +1,84 @@
+﻿using Ivory.Soap.Extensions;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
+
 namespace Ivory.Soap
 {
-    /// <summary>Helper method for SOAP message literals.</summary>
-    public static class SoapMessage
+    /// <summary>Represents a SOAP message.</summary>
+    public class SoapMessage
     {
-        /// <summary>Gets the SOAPAction HTTP Header.</summary>
-        public static readonly string SOAPAction = nameof(SOAPAction);
-
-        /// <summary>Gets the SOAP 1.1 envelope namespace.</summary>
-        public static readonly string NsSoap11Envelop = "http://schemas.xmlsoap.org/soap/envelope/";
-
-        /// <summary>Gets the SOAP 1.2 envelope namespace.</summary>
-        public static readonly string NsSoap12Envelop = "http://www.w3.org/2003/05/soap-envelope";
-
-        /// <summary>Gets the SOAP 1.1 message encoding style.</summary>
-        public static readonly string EncodingStyleSoap11 = "http://schemas.xmlsoap.org/soap/encoding/";
-
-        /// <summary>Gets the SOAP 1.2 message encoding style.</summary>
-        public static readonly string EncodingStyleSoap12 = "http://www.w3.org/2003/05/soap-encoding";
-
         /// <summary>Gets the SOAP envelope.</summary>
-        public static readonly string Envelope = nameof(Envelope);
+        private const string Envelope = nameof(Envelope);
+
+        /// <summary>Initializes a new instance of the <see cref="SoapMessage"/> class.</summary>
+        /// <param name="header">
+        /// The (optional) header of the SOAP message.
+        /// </param>
+        /// <param name="body">
+        /// The body of the SOAP message.
+        /// </param>
+        public SoapMessage(object header, object body)
+        {
+            Header = header;
+            Body = Guard.NotNull(body, nameof(body));
+        }
 
         /// <summary>Gets the SOAP header.</summary>
-        public static readonly string Header = nameof(Header);
+        public object Header { get; }
 
         /// <summary>Gets the SOAP body.</summary>
-        public static readonly string Body = nameof(Body);
+        public object Body { get; }
 
-        /// <summary>Gets the SOAP fault.</summary>
-        public static readonly string Fault = nameof(Fault);
+        /// <summary>Serialize this SOAP message to an <see cref="XmlWriter"/>.</summary>
+        /// <param name="xmlWriter">
+        /// The <see cref="XmlWriter"/> to serialize to.
+        /// </param>
+        public void Save(XmlWriter xmlWriter) => Save(xmlWriter, null);
+
+        /// <summary>Serialize this SOAP message to an <see cref="XmlWriter"/>.</summary>
+        /// /// <param name="xmlWriter">
+        /// The <see cref="XmlWriter"/> to serialize to.
+        /// </param>
+        /// <param name="soapWriterSettings">
+        /// The preferred SOAP settings.
+        /// </param>
+        public void Save(XmlWriter xmlWriter, SoapWriterSettings soapWriterSettings)
+        {
+            Guard.NotNull(xmlWriter, nameof(xmlWriter));
+            var settings = soapWriterSettings ?? new SoapWriterSettings();
+
+            xmlWriter
+                .WriteSoapNode(Envelope, settings)
+                .WriteSoapHeader(Header, settings)
+                .WriteSoapHeader(Body, settings)
+                .WriteCloseElement()
+                .Flush()
+            ;
+        }
+
+        public static Task<SoapMessage> LoadAsync(Stream stream) => LoadAsync(stream, typeof(XElement), typeof(XElement));
+
+        public static async Task<SoapMessage> LoadAsync(Stream stream, Type headerType, Type bodyType)
+        {
+            Guard.NotNull(stream, nameof(stream));
+
+            var root = await XElement.LoadAsync(stream, LoadOptions.None, default);
+
+            var header = root.Element(root.Name.Namespace + nameof(Header))
+                .Elements()
+                .FirstOrDefault()
+                .Deserialize(headerType);
+
+            var body = root.Element(root.Name.Namespace + nameof(Body))
+                .Elements()
+                .FirstOrDefault()
+                .Deserialize(bodyType);
+
+            return new SoapMessage(header, body);
+        }
     }
 }

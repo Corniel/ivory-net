@@ -40,26 +40,17 @@ namespace Ivory.Soap.Mvc
         {
             Guard.NotNull(context, nameof(context));
 
-            var settings = WriterSettings;
             var buffer = new MemoryStream();
+            var writer = XmlWriter.Create(buffer, WriterSettings);
+            var message = new SoapMessage(Header, Body);
+            message.Save(writer, WriterSettings);
 
-            var writer = XmlWriter.Create(buffer, settings);
-
-            writer.WriteSoapEnvelopeElement(settings);
-            {
-                writer
-                    .WriteSoapHeader(Header, settings)
-                    .WriteSoapBody(Body, settings);
-            }
-            writer.WriteEndElement();
-
-            writer.Flush();
             buffer.Position = 0;
 
             return buffer.CopyToAsync(context.HttpContext.Response.Body);
         }
 
         /// <summary>Gets the <see cref="SoapWriterSettings"/> to use.</summary>
-        protected virtual SoapWriterSettings WriterSettings => new SoapWriterSettings();
+        protected virtual SoapWriterSettings WriterSettings { get; } = new SoapWriterSettings();
     }
 }

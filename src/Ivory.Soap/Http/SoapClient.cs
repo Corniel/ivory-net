@@ -73,7 +73,7 @@ namespace Ivory.Soap.Http
         {
             Guard.NotNull(httpClient, nameof(httpClient));
 
-            httpClient.DefaultRequestHeaders.Add(SoapMessage.SOAPAction, soapAction);
+            httpClient.DefaultRequestHeaders.Add(SoapRequest.ActionHeader, soapAction);
             var content = new SoapHttpContent(header, body);
             return httpClient.PostAsync(requestUri, content, cancellationToken);
         }

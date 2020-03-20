@@ -32,16 +32,9 @@ namespace Ivory.Soap.Http
         {
             Guard.NotNull(stream, nameof(stream));
 
-            var settings = WriterSettings;
-
-            var writer = XmlWriter.Create(stream, settings);
-
-            writer
-                .WriteSoapEnvelopeElement(settings)
-                .WriteSoapHeader(Header, settings)
-                .WriteSoapBody(Body, settings)
-                .WriteEndElement();
-
+            var writer = XmlWriter.Create(stream, WriterSettings);
+            var message = new SoapMessage(Header, Body);
+            message.Save(writer, WriterSettings);
             writer.Flush();
 
             return Task.CompletedTask;
@@ -55,6 +48,6 @@ namespace Ivory.Soap.Http
         }
 
         /// <summary>Gets the <see cref="SoapWriterSettings"/> to use.</summary>
-        protected virtual SoapWriterSettings WriterSettings => new SoapWriterSettings();
+        protected virtual SoapWriterSettings WriterSettings { get; } = new SoapWriterSettings();
     }
 }

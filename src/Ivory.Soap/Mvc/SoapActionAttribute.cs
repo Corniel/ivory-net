@@ -23,10 +23,7 @@ namespace Ivory.Soap.Mvc
         public bool Accept(ActionConstraintContext context)
         {
             Guard.NotNull(context, nameof(context));
-
-            return context.RouteContext.HttpContext.Request.Headers.TryGetValue(SoapMessage.SOAPAction, out var values)
-                && values.Count == 1
-                && values[0] == Action;
+            return context.RouteContext.HttpContext.Request.GetSoapAction() == Action;
         }
 
         /// <inheritdoc/>
