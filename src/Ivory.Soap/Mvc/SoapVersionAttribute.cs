@@ -2,7 +2,7 @@
 
 namespace Ivory.Soap.Mvc
 {
-    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class AllowMultiple = false, Inherited = true)]
     public class SoapVersionAttribute : Attribute
     {
         public SoapVersionAttribute(string version, string @namespace)

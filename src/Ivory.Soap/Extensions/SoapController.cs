@@ -42,19 +42,8 @@ namespace Microsoft.AspNetCore.Mvc
 
         private static SoapWriterSettings FromDeclaration(object controller)
         {
-            var trace = new StackTrace();
-            var calling = trace.GetFrame(2)?.GetMethod() as MethodInfo;
-
-            SoapVersionAttribute attr = null;
-            if (calling != null)
-            {
-                attr = calling.GetCustomAttribute<SoapVersionAttribute>();
-            }
-            if (attr is null)
-            {
-                attr = controller.GetType().GetCustomAttribute<SoapVersionAttribute>()
-                    ?? controller.GetType().Assembly.GetCustomAttribute<SoapVersionAttribute>();
-            }
+            var attr = controller.GetType().GetCustomAttribute<SoapVersionAttribute>()
+                ?? controller.GetType().Assembly.GetCustomAttribute<SoapVersionAttribute>();
 
             return attr is null
                 ? SoapWriterSettings.v1_2
