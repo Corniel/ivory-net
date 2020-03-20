@@ -2,8 +2,8 @@
 
 namespace System.Xml.Linq
 {
-    /// <summary>Reperesents an <see cref="XNode"/> deserializer.</summary>
-    public static class XNodeDeserialize
+    /// <summary>Extensions on <see cref="XNode"/> for deserialization.</summary>
+    public static class XNodeDeserializer
     {
         /// <summary>Deserializes the XML node.</summary>
         /// <param name="node">

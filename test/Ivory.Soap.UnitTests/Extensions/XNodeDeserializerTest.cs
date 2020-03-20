@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace Ivory.Soap.UnitTests.Extensions
 {
-    public class XNodeDeserializeTest
+    public class XNodeDeserializerTest
     {
         [Test]
         public void Deserialize_Null_IsNull()
