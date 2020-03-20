@@ -18,10 +18,14 @@ namespace Ivory.Soap.Mvc
         /// <param name="body">
         /// The SOAP body.
         /// </param>
-        public SoapResult(object header, object body)
+        /// <param name="settings">
+        /// The settings to use.
+        /// </param>
+        public SoapResult(object header, object body, SoapWriterSettings settings)
         {
             Header = header;
             Body = body;
+            Settings = settings;
         }
 
         /// <summary>Gets the SOAP header.</summary>
@@ -29,6 +33,9 @@ namespace Ivory.Soap.Mvc
 
         /// <summary>Gets the SOAP body.</summary>
         public object Body { get; }
+
+        /// <summary>Gets the <see cref="SoapWriterSettings"/> to use.</summary>
+        protected SoapWriterSettings Settings { get; }
 
         /// <summary>Writes the SOAP message asynchronously to the response.</summary>
         /// <param name="context">
@@ -41,16 +48,13 @@ namespace Ivory.Soap.Mvc
             Guard.NotNull(context, nameof(context));
 
             var buffer = new MemoryStream();
-            var writer = XmlWriter.Create(buffer, WriterSettings);
+            var writer = XmlWriter.Create(buffer, Settings);
             var message = new SoapMessage(Header, Body);
-            message.Save(writer, WriterSettings);
+            message.Save(writer, Settings);
 
             buffer.Position = 0;
 
             return buffer.CopyToAsync(context.HttpContext.Response.Body);
         }
-
-        /// <summary>Gets the <see cref="SoapWriterSettings"/> to use.</summary>
-        protected virtual SoapWriterSettings WriterSettings { get; } = new SoapWriterSettings();
     }
 }

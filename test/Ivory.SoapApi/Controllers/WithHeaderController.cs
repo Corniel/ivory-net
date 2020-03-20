@@ -5,6 +5,7 @@ using System.Xml.Linq;
 
 namespace Ivory.SoapApi.Controllers
 {
+    [SoapV1_1]
     [Route("/")]
     public class WithHeaderController : ControllerBase
     {
@@ -12,20 +13,20 @@ namespace Ivory.SoapApi.Controllers
         public IActionResult WithHeader(SimpleHeader header, SimpleBody body)
         {
             body.Value++;
-            return new SoapResult(header: header, body: body);
+            return this.Soap(header: header, body: body);
         }
 
         [SoapAction("http://ivory.net/without-header")]
         public IActionResult WithoutHeader(SimpleBody body)
         {
             body.Value++;
-            return new SoapResult(header: null, body: body);
+            return this.Soap(body: body);
         }
 
         [SoapAction("http://ivory.net/xml")]
         public IActionResult Xml(XElement body)
         {
-            return new SoapResult(header: null, body: body);
+            return this.Soap(body: body);
         }
     }
 }
