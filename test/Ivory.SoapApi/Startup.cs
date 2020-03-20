@@ -1,3 +1,4 @@
+using Ivory.Soap.Handlers;
 using Ivory.Soap.Modelbinding;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,34 +8,38 @@ using Microsoft.Extensions.Hosting;
 
 namespace Ivory.SoapApi
 {
-public class Startup
-{
-    public Startup(IConfiguration configuration)
+    public class Startup
     {
-        Configuration = configuration;
-    }
-
-    public IConfiguration Configuration { get; }
-
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddControllers(options =>
+        public Startup(IConfiguration configuration)
         {
-            options.ModelBinderProviders.Insert(0, new SoapModelBinder());
-        });
+            Configuration = configuration;
+        }
 
-    }
+        public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-        app.UseHttpsRedirection();
-        app.UseRouting();
-        app.UseEndpoints(endpoints =>
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
         {
-            endpoints.MapControllers();
-        });
-    }
+            services.AddControllers(options =>
+            {
+                options.ModelBinderProviders.Insert(0, new SoapModelBinder());
+            });
+
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseExceptionHandler(options =>
+            {
+                options.Run(context => SoapFaultHandler.Handle(context));
+            });
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
     }
 }

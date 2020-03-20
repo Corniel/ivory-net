@@ -15,7 +15,7 @@ namespace Ivory.Soap
         public string Subcode { get; set; }
         public string Reason { get; set; }
         public string Actor { get; set; }
-        public object Detail { get; }
+        public object Detail { get; set; }
 
         /// <inheritdoc/>
         public void Save(XmlWriter xmlWriter, SoapWriterSettings settings)

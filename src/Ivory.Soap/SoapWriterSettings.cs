@@ -24,6 +24,7 @@ namespace Ivory.Soap
             Encoding = new UTF8Encoding(false); // UTF8 no BOM
             ConformanceLevel = ConformanceLevel.Fragment;
             CheckCharacters = false;
+            WriteEndDocumentOnClose = true;
         }
 
         /// <summary>Gets or sets the namespace prefix for the SOAP namespace.</summary>

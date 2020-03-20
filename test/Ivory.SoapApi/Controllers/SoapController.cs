@@ -1,13 +1,14 @@
 ﻿using Ivory.Soap.Mvc;
 using Ivory.SoapApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Xml.Linq;
 
 namespace Ivory.SoapApi.Controllers
 {
     [SoapV1_1]
     [Route("/")]
-    public class WithHeaderController : ControllerBase
+    public class SoapController : ControllerBase
     {
         [SoapAction("http://ivory.net/with-header")]
         public IActionResult WithHeader(SimpleHeader header, SimpleBody body)
@@ -27,6 +28,12 @@ namespace Ivory.SoapApi.Controllers
         public IActionResult Xml(XElement body)
         {
             return this.Soap(body: body);
+        }
+
+        [SoapAction("http://ivory.net/exception")]
+        public IActionResult Xml(SimpleBody body)
+        {
+            throw new DivideByZeroException();
         }
     }
 }

@@ -31,5 +31,27 @@ namespace Ivory.Soap.UnitTests
 
             Assert.AreEqual(17, actual.Value);
         }
+
+
+        [Test]
+        public async Task CallActtion_IvoryNetException_ReturnsSoapFault()
+        {
+            using var client = CreateClient();
+
+            var response = await client.PostSoapAsync(
+                requestUri: new Uri(@"/", UriKind.Relative),
+                soapAction: "http://ivory.net/exception",
+                header: null,
+                body: new SimpleBody { Value = 666 },
+                cancellationToken: default);
+
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+
+            //var message = await SoapMessage.LoadAsync(await response.Content.ReadAsStreamAsync(), typeof(XElement), typeof(SimpleBody));
+
+            //var actual = (SimpleBody)message.Body;
+
+            //Assert.AreEqual(17, actual.Value);
+        }
     }
 }

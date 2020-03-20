@@ -52,9 +52,9 @@ namespace Ivory.Soap.Extensions
                 ? formattable.ToString(null, CultureInfo.InvariantCulture)
                 : value.ToString();
 
-            xmlWriter.WriteStartElement(localName, str);
-
-            return xmlWriter;
+            xmlWriter.WriteStartElement(localName, null);
+            xmlWriter.WriteString(str);
+            return xmlWriter.WriteCloseElement();
         }
 
         /// <summary>Writes SOAP content.</summary>
