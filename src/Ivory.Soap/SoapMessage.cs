@@ -54,7 +54,7 @@ namespace Ivory.Soap
             xmlWriter
                 .WriteSoapNode(Envelope, settings)
                 .WriteSoapHeader(Header, settings)
-                .WriteSoapHeader(Body, settings)
+                .WriteSoapBody(Body, settings)
                 .WriteCloseElement()
                 .Flush()
             ;
@@ -68,12 +68,12 @@ namespace Ivory.Soap
 
             var root = await XElement.LoadAsync(stream, LoadOptions.None, default);
 
-            var header = root.Element(root.Name.Namespace + nameof(Header))
+            var header = root.Element(root.Name.Namespace + nameof(Header))?
                 .Elements()
                 .FirstOrDefault()
                 .Deserialize(headerType);
 
-            var body = root.Element(root.Name.Namespace + nameof(Body))
+            var body = root.Element(root.Name.Namespace + nameof(Body))?
                 .Elements()
                 .FirstOrDefault()
                 .Deserialize(bodyType);
