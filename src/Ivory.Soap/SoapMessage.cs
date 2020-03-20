@@ -9,7 +9,7 @@ using System.Xml.Linq;
 namespace Ivory.Soap
 {
     /// <summary>Represents a SOAP message.</summary>
-    public class SoapMessage
+    public class SoapMessage : ISoapWritable
     {
         /// <summary>Gets the SOAP envelope.</summary>
         private const string Envelope = nameof(Envelope);
@@ -33,26 +33,15 @@ namespace Ivory.Soap
         /// <summary>Gets the SOAP body.</summary>
         public object Body { get; }
 
-        /// <summary>Serialize this SOAP message to an <see cref="XmlWriter"/>.</summary>
-        /// <param name="xmlWriter">
-        /// The <see cref="XmlWriter"/> to serialize to.
-        /// </param>
-        public void Save(XmlWriter xmlWriter) => Save(xmlWriter, null);
-
-        /// <summary>Serialize this SOAP message to an <see cref="XmlWriter"/>.</summary>
-        /// /// <param name="xmlWriter">
-        /// The <see cref="XmlWriter"/> to serialize to.
-        /// </param>
-        /// <param name="soapWriterSettings">
-        /// The preferred SOAP settings.
-        /// </param>
-        public void Save(XmlWriter xmlWriter, SoapWriterSettings soapWriterSettings)
+        /// <inheritdoc/>
+        public void Save(XmlWriter xmlWriter, SoapWriterSettings settings)
         {
             Guard.NotNull(xmlWriter, nameof(xmlWriter));
-            var settings = soapWriterSettings ?? new SoapWriterSettings();
+
+            settings ??= SoapWriterSettings.v1_2;
 
             xmlWriter
-                .WriteSoapNode(Envelope, settings)
+                .WriteSoapElement(Envelope, settings)
                 .WriteSoapHeader(Header, settings)
                 .WriteSoapBody(Body, settings)
                 .WriteCloseElement()

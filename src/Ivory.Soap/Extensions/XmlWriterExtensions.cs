@@ -1,4 +1,7 @@
-﻿using System.Xml;
+﻿using System;
+using System.Globalization;
+using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Ivory.Soap.Extensions
@@ -12,8 +15,8 @@ namespace Ivory.Soap.Extensions
             return header is null
                 ? xmlWriter
                 : xmlWriter
-                    .WriteSoapNode(nameof(SoapMessage.Header), settings)
-                    .WriteContent(header)
+                    .WriteSoapElement(nameof(SoapMessage.Header), settings)
+                    .WriteContent(header, settings)
                     .WriteCloseElement()
             ;
         }
@@ -22,8 +25,8 @@ namespace Ivory.Soap.Extensions
         public static XmlWriter WriteSoapBody(this XmlWriter xmlWriter, object header, SoapWriterSettings settings)
         {
             return xmlWriter
-                    .WriteSoapNode(nameof(SoapMessage.Body), settings)
-                    .WriteContent(header)
+                    .WriteSoapElement(nameof(SoapMessage.Body), settings)
+                    .WriteContent(header, settings)
                     .WriteCloseElement()
             ;
         }
@@ -33,14 +36,29 @@ namespace Ivory.Soap.Extensions
         /// Calls <see cref="XmlWriter.WriteStartElement(string, string, string)"/>
         /// using the SOAP namespace and prefix from the settings.
         /// </remarks>
-        public static XmlWriter WriteSoapNode(this XmlWriter xmlWriter, string localName, SoapWriterSettings settings)
+        public static XmlWriter WriteSoapElement(this XmlWriter xmlWriter, string localName, SoapWriterSettings settings)
         {
             xmlWriter.WriteStartElement(settings.NamespacePrefix, localName, settings.SoapVersion.Namespace);
             return xmlWriter;
         }
 
+        public static XmlWriter WriteElementIfNotNull(this XmlWriter xmlWriter, string localName, object value)
+        {
+            if (value is null)
+            {
+                return xmlWriter;
+            }
+            var str = value is IFormattable formattable
+                ? formattable.ToString(null, CultureInfo.InvariantCulture)
+                : value.ToString();
+
+            xmlWriter.WriteStartElement(localName, str);
+
+            return xmlWriter;
+        }
+
         /// <summary>Writes SOAP content.</summary>
-        public static XmlWriter WriteContent(this XmlWriter xmlWriter, object content)
+        public static XmlWriter WriteContent(this XmlWriter xmlWriter, object content, SoapWriterSettings settings)
         {
             Guard.NotNull(xmlWriter, nameof(xmlWriter));
 
@@ -48,9 +66,20 @@ namespace Ivory.Soap.Extensions
             {
                 // write nothing.
             }
-            else if (content is IXmlSerializable xml)
+            else if (content is ISoapWritable soapWritable)
             {
-                xml.WriteXml(xmlWriter);
+                soapWritable.Save(xmlWriter, settings);
+            }
+            else if (content is XContainer container)
+            {
+                foreach (var element in container.Elements())
+                {
+                    element.Save(xmlWriter);
+                }
+            }
+            else if (content is IXmlSerializable xmlSerializable)
+            {
+                xmlSerializable.WriteXml(xmlWriter);
             }
             else
             {
