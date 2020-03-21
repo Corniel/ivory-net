@@ -24,6 +24,11 @@ namespace Ivory.Soap.UnitTests
                 body: new SimpleHeader(),
                 cancellationToken: default);
 
+            foreach(var header in response.Headers)
+            {
+                Console.WriteLine($"{header.Key}: {header.Value}");
+            }
+
             Console.WriteLine(await response.Content.ReadAsStringAsync());
 
             //var message = await SoapMessage.LoadAsync(await response.Content.ReadAsStreamAsync(), typeof(XElement), typeof(SimpleBody));

@@ -43,7 +43,7 @@ namespace Ivory.Soap.Mvc
         /// includes information about the action that was executed and request
         /// information.
         /// </param>
-        public Task ExecuteResultAsync(ActionContext context)
+        public virtual Task ExecuteResultAsync(ActionContext context)
         {
             Guard.NotNull(context, nameof(context));
 
@@ -53,6 +53,11 @@ namespace Ivory.Soap.Mvc
             message.Save(writer, Settings);
 
             buffer.Position = 0;
+
+            if (Body is SoapFault fault)
+            {
+                context.HttpContext.Response.StatusCode = (int)fault.StatusCode;
+            }
 
             return buffer.CopyToAsync(context.HttpContext.Response.Body);
         }

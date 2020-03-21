@@ -19,7 +19,7 @@ namespace Ivory.Soap.Handlers
                 return Task.CompletedTask;
             }
 
-            var fault = new SoapFault
+            var fault = new SoapFault1_2
             {
                 Code = SoapFaultCode.Server,
                 Subcode = ex.Error.GetType().Name,

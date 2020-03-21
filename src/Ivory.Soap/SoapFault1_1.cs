@@ -1,32 +1,33 @@
 ﻿using Ivory.Soap.Extensions;
 using Ivory.Soap.Modelbinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Collections;
 using System.Linq;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Ivory.Soap
 {
-    public class SoapFault1_1 : ISoapWritable
+    [XmlRoot("Fault", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+    public class SoapFault1_1 : SoapFault
     {
-        public SoapFault1_1(SoapFaultCode faultCode, string faultString, object detail)
+        public SoapFault1_1() { }
+
+        public SoapFault1_1(SoapFaultCode faultCode, string faultString)
         {
             FaultCode = Guard.DefinedEnum(faultCode, nameof(faultCode));
             FaultString = faultString;
-            Detail = detail;
         }
 
         /// <summary>Gets the SOAP fault code.</summary>
-        public SoapFaultCode FaultCode { get; }
+        [XmlElement("faultcode", Namespace = "")]
+        public SoapFaultCode FaultCode { get; set; }
 
         /// <summary>Gets the SOAP fault string.</summary>
-        public string FaultString { get; }
-
-        /// <summary>Gets the SOAP fault details.</summary>
-        public object Detail { get; }
+        [XmlElement("faultstring", Namespace = "")]
+        public string FaultString { get; set; }
 
         /// <inheritdoc/>
-        public void Save(XmlWriter xmlWriter, SoapWriterSettings settings)
+        public override void Save(XmlWriter xmlWriter, SoapWriterSettings settings)
         {
             Guard.NotNull(xmlWriter, nameof(xmlWriter));
             xmlWriter
@@ -34,35 +35,43 @@ namespace Ivory.Soap
                 .WriteElementIfNotNull("faultcode", FaultCode)
                 .WriteElementIfNotNull("faultstring", FaultString)
             ;
-            if (Detail != null)
-            {
-                xmlWriter.WriteStartElement("detail");
+            //if (Detail != null)
+            //{
+            //    xmlWriter.WriteStartElement("detail");
 
-                if (Detail.GetType().IsArray)
-                {
-                    foreach (var child in (IEnumerable)Detail)
-                    {
-                        xmlWriter.WriteContent(child, settings);
-                    }
-                }
-                else
-                {
-                    xmlWriter.WriteContent(Detail, settings);
-                }
-                xmlWriter.WriteCloseElement();
-            }
+            //    if (Detail.GetType().IsArray)
+            //    {
+            //        foreach (var child in (IEnumerable)Detail)
+            //        {
+            //            xmlWriter.WriteContent(child, settings);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        xmlWriter.WriteContent(Detail, settings);
+            //    }
+            //    xmlWriter.WriteCloseElement();
+            //}
             xmlWriter
                 .WriteCloseElement();
         }
 
         /// <summary>Creates a SOAP fault v1.1 based on the model state.</summary>
-        public static SoapFault1_1 FromModelState(ModelStateDictionary modelState)
+        public static SoapFault1_1<BindingError> FromModelState(ModelStateDictionary modelState)
         {
-            return new SoapFault1_1(
-                SoapFaultCode.Client,
-                "Invalid request",
-                modelState.GetErrors().ToArray()
-            );
+            return new SoapFault1_1<BindingError>
+            {
+                FaultCode = SoapFaultCode.Client,
+                FaultString = "Invalid request",
+                Details = modelState.GetErrors().ToArray(),
+            };
         }
+    }
+
+    public class SoapFault1_1<TDetail> : SoapFault1_1
+    {
+        /// <summary>Gets the SOAP fault details.</summary>
+        [XmlElement("detail", Namespace = "")]
+        public TDetail[] Details { get; set; }
     }
 }

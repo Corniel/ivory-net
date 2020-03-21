@@ -5,7 +5,7 @@ Ivory.NET SOAP is lightweight library on top of
 ## SOAP endpoint
 A custom controller could look like:
 ``` C#
-[SoapV1_2]
+[SoapController(version: SoapVersion.V1_2, route: "/")]
 public class CustomController : ControllerBase
 {
     [SoapAction("http://custom.org/custom-action")]
@@ -19,7 +19,7 @@ public class CustomController : ControllerBase
 The `SoupAction` attribute is required, as without it, the routing could not
 know, how to reach the specific endpoint. The `this.Soap()` extension method
 ensures the correct output taking the `SoapVersion` attribute (1.2 in this
-example), into account, where specifying the SOAP version is optional.
+example), into account.
 
 The Startup.cs should look a bit like this:
 
