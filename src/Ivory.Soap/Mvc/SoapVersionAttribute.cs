@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 
 namespace Ivory.Soap.Mvc
 {
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public class SoapVersionAttribute : Attribute
+    public class SoapVersionAttribute : Attribute, IActionFilter
     {
         public SoapVersionAttribute(string version, string @namespace)
         {
@@ -11,6 +12,16 @@ namespace Ivory.Soap.Mvc
         }
 
         public SoapVersion Version { get; }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+            
+        }
 
         public override string ToString() => Version.ToString();
 
