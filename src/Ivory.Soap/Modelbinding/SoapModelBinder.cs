@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -115,7 +117,10 @@ namespace Ivory.Soap.Modelbinding
             }
             else
             {
-                bindingContext.Result = ModelBindingResult.Success(values);
+                // We need an ModelType[], not object[] with ModelType in it.
+                var array = (Array)Activator.CreateInstance(modelType.MakeArrayType(), values.Length);
+                Array.Copy(values, array, values.Length);
+                bindingContext.Result = ModelBindingResult.Success(array);
             }
         }
     }
