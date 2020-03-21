@@ -21,16 +21,16 @@ namespace Ivory.Soap
         public void Save(XmlWriter xmlWriter, SoapWriterSettings settings)
         {
             Guard.NotNull(xmlWriter, nameof(xmlWriter));
-            settings ??= SoapWriterSettings.v1_2;
+            settings ??= SoapWriterSettings.V1_2;
 
-            if (settings?.SoapVersion.Version == SoapVersion.v1_1.Version)
-            {
-                SaveV1_1(xmlWriter, settings);
-            }
-            else
-            {
-                SaveV1_2(xmlWriter, settings);
-            }
+            //if (settings?.SoapVersion.Version == SoapVersion.1_1.Version)
+            //{
+            //    SaveV1_1(xmlWriter, settings);
+            //}
+            //else
+            //{
+            //    SaveV1_2(xmlWriter, settings);
+            //}
         }
 
         private void SaveV1_2(XmlWriter xmlWriter, SoapWriterSettings settings)
@@ -40,7 +40,7 @@ namespace Ivory.Soap
             {
                 xmlWriter
                 .WriteSoapElement(nameof(Code), settings)
-                .WriteElementString(settings.NamespacePrefix, "Value", settings.SoapVersion.Namespace, Code.ToString());
+                .WriteElementString(settings.NamespacePrefix, "Value", settings.Namespace, Code.ToString());
 
                 xmlWriter
                     .WriteCloseElement()

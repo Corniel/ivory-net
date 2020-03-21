@@ -38,7 +38,7 @@ namespace Ivory.Soap.Extensions
         /// </remarks>
         public static XmlWriter WriteSoapElement(this XmlWriter xmlWriter, string localName, SoapWriterSettings settings)
         {
-            xmlWriter.WriteStartElement(settings.NamespacePrefix, localName, settings.SoapVersion.Namespace);
+            xmlWriter.WriteStartElement(settings.NamespacePrefix, localName, settings.Namespace ?? settings.SoapVersion.DefaultNamespace());
             return xmlWriter;
         }
 

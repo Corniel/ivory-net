@@ -29,7 +29,7 @@ namespace Ivory.Soap.Handlers
             var message = new SoapMessage(header: null, body: fault);
 
             var buffer = new StringBuilder();
-            var settings = SoapWriterSettings.v1_1;
+            var settings = SoapWriterSettings.V1_1;
             var writer = XmlWriter.Create(buffer, settings);
 
             message.Save(writer, settings);

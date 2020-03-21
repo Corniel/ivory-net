@@ -3,7 +3,6 @@
 using Ivory;
 using Ivory.Soap;
 using Ivory.Soap.Mvc;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace Microsoft.AspNetCore.Mvc
@@ -42,12 +41,11 @@ namespace Microsoft.AspNetCore.Mvc
 
         private static SoapWriterSettings FromDeclaration(object controller)
         {
-            var attr = controller.GetType().GetCustomAttribute<SoapVersionAttribute>()
-                ?? controller.GetType().Assembly.GetCustomAttribute<SoapVersionAttribute>();
+            var attr = controller.GetType().GetCustomAttribute<SoapControllerAttribute>();
 
             return attr is null
-                ? SoapWriterSettings.v1_2
-                : attr.GetSettings();
+                ? SoapWriterSettings.V1_2
+                : SoapWriterSettings.V1_1;
         }
     }
 }

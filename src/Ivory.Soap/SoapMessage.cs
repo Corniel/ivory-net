@@ -38,7 +38,7 @@ namespace Ivory.Soap
         {
             Guard.NotNull(xmlWriter, nameof(xmlWriter));
 
-            settings ??= SoapWriterSettings.v1_2;
+            settings ??= SoapWriterSettings.V1_2;
 
             xmlWriter
                 .WriteSoapElement(Envelope, settings)

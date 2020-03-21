@@ -53,13 +53,14 @@ namespace Ivory.Soap.Modelbinding
             }
             catch (Exception x)
             {
-                bindingContext.ModelState.AddModelError(bindingContext.ModelName, x.Message);
+                x = x.InnerException is null ? x : x.InnerException;
+                bindingContext.ModelState.AddModelError(bindingContext.FieldName, x.Message);
                 return;
             }
 
             if (!isHeader && model is null)
             {
-                bindingContext.ModelState.AddModelError(bindingContext.ModelName, "SOAP body is missing.");
+                bindingContext.ModelState.AddModelError(bindingContext.FieldName, "SOAP body is missing.");
                 bindingContext.Result = ModelBindingResult.Failed();
                 return;
             }

@@ -33,7 +33,8 @@ namespace Ivory.Soap.UnitTests
             var settings = new SoapWriterSettings
             { 
                 NamespacePrefix = "soap",
-                SoapVersion = new SoapVersion("custom", "http://ivory.org/soap"),
+                SoapVersion = SoapVersion.None,
+                Namespace = "http://ivory.org/soap",
             };
 
             using var context = WriterContext.Create(settings);
@@ -55,7 +56,7 @@ namespace Ivory.Soap.UnitTests
         [Test]
         public void Save_NoHeader_ValidSoapV1_1()
         {
-            using var context = WriterContext.Create(SoapWriterSettings.v1_1);
+            using var context = WriterContext.Create(SoapWriterSettings.V1_1);
 
             var message = new SoapMessage(header: null, body: new SimpleBody { Value = 17 });
             message.Save(context.Writer, context.Settings);
@@ -74,7 +75,7 @@ namespace Ivory.Soap.UnitTests
         [Test]
         public void Save__WithHeaderAndBody_ValidSoapV1_2()
         {
-            using var context = WriterContext.Create(SoapWriterSettings.v1_2);
+            using var context = WriterContext.Create(SoapWriterSettings.V1_2);
 
             var message = new SoapMessage(header: new SimpleHeader { Message = "Hello" }, body: new SimpleBody { Value = 17 });
             message.Save(context.Writer, context.Settings);

@@ -1,4 +1,5 @@
-﻿using Ivory.Soap.Mvc;
+﻿using Ivory.Soap;
+using Ivory.Soap.Mvc;
 using Ivory.SoapApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -6,9 +7,8 @@ using System.Xml.Linq;
 
 namespace Ivory.SoapApi.Controllers
 {
-    [SoapV1_1]
-    [Route("/")]
-    public class SoapController : ControllerBase
+    [SoapController(version: SoapVersion.V1_1)]
+    public class ExampleSoapController : ControllerBase
     {
         [SoapAction("http://ivory.net/with-header")]
         public IActionResult WithHeader(SimpleHeader header, SimpleBody body)
