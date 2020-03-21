@@ -1,91 +1,122 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Ivory.Soap.Modelbinding
 {
-    /// <summary>Implementation of an <see cref="IModelBinder"/> for SOAP.</summary>
-    public class SoapModelBinder : IModelBinder, IModelBinderProvider
+    /// <summary>Abstract SOAP model binder.</summary>
+    public abstract class SoapModelBinder : IModelBinder
     {
-        private const string envelope = nameof(envelope);
-        private const string header = nameof(header);
-        private const string body = nameof(body);
+        /// <summary>Returns true if the <see cref="IModelBinder"/> can bind the model.</summary>
+        public abstract bool CanBind(ModelMetadata metadata);
+
+        /// <summary>Returns true if the binding source is <see cref="BindingSource.Body"/>.</summary>
+        protected static bool BindingSourceIsBody(ModelMetadata metadata) => metadata?.BindingSource is null || metadata.BindingSource == BindingSource.Body;
 
         /// <inheritdoc/>
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
-        {
-            return this;
-        }
-
-        /// <inheritdoc/>
-        public async Task BindModelAsync(ModelBindingContext bindingContext)
+        public virtual async Task BindModelAsync(ModelBindingContext bindingContext)
         {
             Guard.NotNull(bindingContext, nameof(bindingContext));
 
-            // This binder is only suited for SOAP requests.
-            if (!bindingContext.HttpContext.Request.IsSoapRequest())
+            var container = await GetContainerAysnc(bindingContext);
+
+            if (container is null) { /* No valid SOAP */ }
+            else if (bindingContext.ModelType == typeof(XContainer))
             {
-                return;
+                BindXContainer(bindingContext, container);
             }
-
-            var isHeader = bindingContext.FieldName == header;
-
-            if (!isHeader && bindingContext.FieldName != body)
+            else if (bindingContext.ModelType == typeof(XElement))
             {
-                return;
+                BindXElement(bindingContext, container);
             }
-
-            var message = await GetSoapMessageAsync(bindingContext);
-
-            if (message is null)
+            else
             {
-                return;
+                BindXmlSerializable(bindingContext, container);
             }
-
-            var content = isHeader ? message.Header : message.Body;
-
-            object model;
-
-            try
-            {
-                model = ((XElement)content).Deserialize(bindingContext.ModelType);
-            }
-            catch (Exception x)
-            {
-                x = x.InnerException is null ? x : x.InnerException;
-                bindingContext.ModelState.AddModelError(bindingContext.FieldName, x.Message);
-                return;
-            }
-
-            if (!isHeader && model is null)
-            {
-                bindingContext.ModelState.AddModelError(bindingContext.FieldName, "SOAP body is missing.");
-                bindingContext.Result = ModelBindingResult.Failed();
-                return;
-            }
-            bindingContext.Result = ModelBindingResult.Success(model);
         }
 
-        private static async Task<SoapMessage> GetSoapMessageAsync(ModelBindingContext bindingContext)
+        /// <summary>Gets the <see cref="XContainer"/> for the part to bind.</summary>
+        protected abstract Task<XContainer> GetContainerAysnc(ModelBindingContext bindingContext);
+
+        /// <summary>Gets the SOAP envelope.</summary>
+        /// <remarks>
+        /// The is result is always stored in the model state.
+        /// </remarks>
+        protected static async Task<XDocument> GetEnvelopeAsync(ModelBindingContext bindingContext)
         {
-            if (bindingContext.ModelState.TryGetValue(envelope, out var entry))
+            Guard.NotNull(bindingContext, nameof(bindingContext));
+
+            if (bindingContext.ModelState.TryGetValue("$envelope", out var entry))
             {
-                return (SoapMessage)entry.RawValue;
+                return (XDocument)entry.RawValue;
             }
 
             var stream = bindingContext.HttpContext.Request.Body;
             try
             {
-                var message = await SoapMessage.LoadAsync(stream);
-                bindingContext.ModelState.SetModelValue(envelope, message, string.Empty);
+                var message = await XDocument.LoadAsync(stream, LoadOptions.None, default);
+                bindingContext.ModelState.SetModelValue("$envelope", message, string.Empty);
                 return message;
             }
-            catch
+#pragma warning disable S2221 // "Exception" should not be caught when not required by called methods
+            // Exception is used for handling errors.
+            catch (Exception x)
+#pragma warning restore S2221 // "Exception" should not be caught when not required by called methods
             {
-                bindingContext.Result = ModelBindingResult.Failed();
+                bindingContext.ModelState.AddModelError("envelope", x.Message);
             }
             return null;
+        }
+
+        private static void BindXContainer(ModelBindingContext bindingContext, XContainer container)
+        {
+            bindingContext.Result = ModelBindingResult.Success(container);
+        }
+
+        private static void BindXElement(ModelBindingContext bindingContext, XContainer container)
+        {
+            var second = container.Elements().Skip(1).FirstOrDefault();
+
+            if (second is null)
+            {
+                bindingContext.Result = ModelBindingResult.Success((XElement)container);
+            }
+            else
+            {
+                bindingContext.ModelState.AddModelError(
+                    bindingContext.FieldName,
+                    string.Format(SoapMessages.MulitpleElements, second.Name.LocalName));
+            }
+        }
+
+        private static void BindXmlSerializable(ModelBindingContext bindingContext, XContainer container)
+        {
+            var modelType = bindingContext.ModelType.IsArray ? bindingContext.ModelType.GetElementType() : bindingContext.ModelType;
+
+            var values = container
+                .Elements()
+                .Select(element => element.Deserialize(modelType))
+                .ToArray();
+
+            if (!bindingContext.ModelType.IsArray)
+            {
+                if (values.Length > 1)
+                {
+                    bindingContext.ModelState.AddModelError(
+                        bindingContext.FieldName,
+                        string.Format(SoapMessages.MulitpleElements, container.Elements().FirstOrDefault().Name.LocalName));
+                }
+                else
+                {
+                    bindingContext.Result = ModelBindingResult.Success(values.FirstOrDefault());
+                }
+            }
+            else
+            {
+                bindingContext.Result = ModelBindingResult.Success(values);
+            }
         }
     }
 }

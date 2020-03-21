@@ -4,6 +4,9 @@ using System.Xml.Serialization;
 namespace Ivory.Soap.Modelbinding
 {
     /// <summary>Represents a biding error.</summary>
+    /// <remarks>
+    /// Microsoft's flavor does not support XML serialization.
+    /// </remarks>
     [Serializable]
     [XmlRoot(Namespace = "http://ivory.org/binding-error")]
     public class BindingError

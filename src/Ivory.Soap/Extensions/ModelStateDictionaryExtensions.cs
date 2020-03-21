@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Ivory.Soap.Modelbinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 
-namespace Ivory.Soap.Modelbinding
+namespace Ivory.Soap.Extensions
 {
     internal static class ModelStateDictionaryExtensions
     {
