@@ -30,7 +30,7 @@ namespace Ivory.Soap
             IndentChars = "  ";
             Indent = true;
             Encoding = new UTF8Encoding(false); // UTF8 no BOM
-            ConformanceLevel = ConformanceLevel.Fragment;
+            ConformanceLevel = ConformanceLevel.Document;
             CheckCharacters = false;
             WriteEndDocumentOnClose = true;
         }

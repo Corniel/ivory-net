@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Xml;
+using System.Collections.Generic;
+using System.Text;
 using System.Xml.Serialization;
 
-namespace Ivory.Soap
+namespace XXX
 {
-    /// <summary>Represents the SOAP fault.</summary>
     [Serializable]
     [XmlRoot("Fault")]
     public class SoapFault
     {
         /// <summary>Gets the SOAP fault code.</summary>
-        [XmlElement("faultcode", Namespace = "", Order = 0)]
+        [XmlElement("faultcode", Namespace = "")]
         public SoapFaultCode FaultCode { get; set; }
 
         /// <summary>Gets the SOAP fault string.</summary>
-        [XmlElement("faultstring", Namespace = "", Order = 1)]
+        [XmlElement("faultstring", Namespace = "")]
         public string FaultString { get; set; }
     }
 }

@@ -49,14 +49,14 @@ namespace Ivory.Soap.Mvc
 
             var buffer = new MemoryStream();
             var writer = XmlWriter.Create(buffer, Settings);
-            var message = new SoapMessage(Header, Body);
+            var message = new So(Header, Body);
             message.Save(writer, Settings);
 
             buffer.Position = 0;
 
             if (Body is SoapFault fault)
             {
-                context.HttpContext.Response.StatusCode = (int)fault.StatusCode;
+                context.HttpContext.Response.StatusCode = 500;
             }
 
             return buffer.CopyToAsync(context.HttpContext.Response.Body);

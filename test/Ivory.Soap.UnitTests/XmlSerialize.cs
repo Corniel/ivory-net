@@ -2,14 +2,13 @@
 using NUnit.Framework;
 using System;
 using System.Xml.Serialization;
-using XXX;
 
 namespace Ivory.Soap.UnitTests
 {
-    public class Serialize
+    public class XmlSerialize
     {
         [Test]
-        public void XmlSerialize()
+        public void Serialize()
         {
             using var context = WriterContext.Create(SoapWriterSettings.V1_1);
 
