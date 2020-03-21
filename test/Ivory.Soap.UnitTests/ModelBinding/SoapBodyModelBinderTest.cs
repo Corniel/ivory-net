@@ -23,7 +23,7 @@ namespace Ivory.Soap.UnitTests.ModelBinding
             var binder = new SoapBodyModelBinder();
             await binder.BindModelAsync(context);
 
-            var body = ModelBindAssert.SuccessArray<SimpleBody>(context.Result);
+            var body = ModelBindAssert.Success<SimpleBody[]>(context.Result);
 
             Assert.AreEqual(new[] { 42, 314, 666 }, body.Select(b => b.Value));
         }

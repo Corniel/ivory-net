@@ -13,12 +13,5 @@ namespace Ivory.Soap.UnitTests.TestTools
             Assert.NotNull(model);
             return model;
         }
-        public static TModel[] SuccessArray<TModel>(ModelBindingResult result)
-           where TModel : class
-        {
-            var models = (result.Model as object[])?.Cast<TModel>().ToArray();
-            Assert.NotNull(models);
-            return models;
-        }
     }
 }
