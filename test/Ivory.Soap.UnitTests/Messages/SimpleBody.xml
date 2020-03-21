@@ -1,0 +1,7 @@
+﻿<Envelope>
+  <Body>
+    <SimpleBody>
+      <Value>42</Value>
+    </SimpleBody>
+  </Body>
+</Envelope>

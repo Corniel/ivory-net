@@ -19,7 +19,7 @@ namespace Ivory.Soap.Modelbinding
         protected override async Task<XContainer> GetContainerAysnc(ModelBindingContext bindingContext)
         {
             var envelope = await GetEnvelopeAsync(bindingContext);
-            return envelope.Root.Element(envelope.Root.Name.Namespace + "Body");
+            return envelope?.Root.Element(envelope.Root.Name.Namespace + "Body");
         }
     }
 }

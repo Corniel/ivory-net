@@ -1,0 +1,13 @@
+﻿<Envelope>
+  <Body>
+    <SimpleBody>
+      <Value>42</Value>
+    </SimpleBody>
+    <SimpleBody>
+      <Value>314</Value>
+    </SimpleBody>
+    <SimpleBody>
+      <Value>666</Value>
+    </SimpleBody>
+  </Body>
+</Envelope>

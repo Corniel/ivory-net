@@ -39,13 +39,13 @@ namespace Ivory.Soap.UnitTests
         }
 
         [Test]
-        public async Task PostSoapAsync()
+        public async Task CallAction_WithABody_GetsRepsonse()
         {
             using var client = CreateClient();
 
             var response = await client.PostSoapAsync(
                 requestUri: new Uri(@"/", UriKind.Relative),
-                soapAction: "http://ivory.net/with-header",
+                soapAction: "http://ivory.net/without-header",
                 header: null,
                 body: new SimpleBody { Value = 16 },
                 cancellationToken: default);

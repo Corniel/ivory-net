@@ -12,7 +12,7 @@ namespace Ivory.Soap.UnitTests.Mocking
     {
         public override IFeatureCollection Features => throw new NotImplementedException();
 
-        public override HttpRequest Request => throw new NotImplementedException();
+        public override HttpRequest Request { get; } = new HttpRequestStub();
 
         public override HttpResponse Response { get; } = new HttpResponseStub();
 

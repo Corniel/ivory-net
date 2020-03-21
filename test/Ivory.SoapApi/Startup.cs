@@ -22,7 +22,7 @@ namespace Ivory.SoapApi
         {
             services.AddControllers(options =>
             {
-                options.ModelBinderProviders.Insert(0, new SoapModelBinder());
+                options.ModelBinderProviders.Insert(0, new SoapModelBinderProvider());
             });
 
         }
