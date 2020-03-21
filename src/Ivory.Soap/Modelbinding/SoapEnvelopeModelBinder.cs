@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace Ivory.Soap.Modelbinding
 {
     /// <summary>Model binder for the SOAP envelope as <see cref="XDocument"/>.</summary>
-    public class SoapEvenlopeModelBinder : SoapModelBinder
+    public class SoapEnvelopeModelBinder : SoapModelBinder
     {
         /// <inheritdoc/>
         public override bool CanBind(ModelMetadata metadata)

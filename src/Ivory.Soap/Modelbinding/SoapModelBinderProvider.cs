@@ -3,13 +3,14 @@ using System.Linq;
 
 namespace Ivory.Soap.Modelbinding
 {
+    /// <summary>Implements an <see cref="IModelBinderProvider"/> for SOAP.</summary>
     public class SoapModelBinderProvider : IModelBinderProvider
     {
-        private readonly SoapModelBinder[] binders = new SoapModelBinder[] 
+        private readonly SoapModelBinder[] binders = new SoapModelBinder[]
         {
             new SoapBodyModelBinder(),
             new SoapHeaderModelBinder(),
-            new SoapEvenlopeModelBinder(),
+            new SoapEnvelopeModelBinder(),
         };
 
         /// <inheritdoc/>
