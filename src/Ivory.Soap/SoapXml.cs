@@ -24,6 +24,13 @@ namespace Ivory.Soap
             WriteEndDocumentOnClose = true,
         };
 
+
+        /// <summary>Gets the <see cref="XmlReaderSettings"/> to read SOAP with.</summary>
+        public static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings
+        {
+            Async = false,
+        };
+
         /// <summary>Adds a namespace to the <see cref="XmlSerializerNamespaces"/> fluently.</summary>
         public static XmlSerializerNamespaces AddNs(this XmlSerializerNamespaces namespaces, string prefix, string ns)
         {

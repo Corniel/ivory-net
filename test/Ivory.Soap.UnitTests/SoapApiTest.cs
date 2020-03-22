@@ -4,14 +4,13 @@ using Ivory.SoapApi.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Ivory.Soap.UnitTests
 {
     public class SoapApiTest : WebApplicationFactory<Startup>
     {
-
         [Test]
         public async Task CallAction_NoBody_SoapFault()
         {
@@ -25,18 +24,11 @@ namespace Ivory.Soap.UnitTests
                 envelope: envelope,
                 cancellationToken: default);
 
-            foreach(var header in response.Headers)
-            {
-                Console.WriteLine($"{header.Key}: {header.Value}");
-            }
-
             Console.WriteLine(await response.Content.ReadAsStringAsync());
 
-            //var message = await SoapMessage.LoadAsync(await response.Content.ReadAsStreamAsync(), typeof(XElement), typeof(SimpleBody));
+            var content = SoapEnvelope.Load<SoapFault>(await response.Content.ReadAsStreamAsync());
 
-            //var actual = (SimpleBody)message.Body;
-
-            //Assert.AreEqual(17, actual.Value);
+            Assert.AreEqual(SoapFaultCode.Client, content.Body.FirstOrDefault().FaultCode);
         }
 
         [Test]
@@ -54,13 +46,10 @@ namespace Ivory.Soap.UnitTests
 
             Console.WriteLine(await response.Content.ReadAsStringAsync());
 
-            //var message =await SoapMessage.LoadAsync(await response.Content.ReadAsStreamAsync(), typeof(XElement), typeof(SimpleBody));
+            var content = SoapEnvelope.Load<SimpleBody>(await response.Content.ReadAsStreamAsync());
 
-            //var actual = (SimpleBody)message.Body;
-
-            //Assert.AreEqual(17, actual.Value);
+            Assert.AreEqual(17, content.Body.FirstOrDefault()?.Value);
         }
-
 
         [Test]
         public async Task CallActtion_IvoryNetException_ReturnsSoapFault()

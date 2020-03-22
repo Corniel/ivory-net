@@ -67,5 +67,32 @@ namespace Ivory.Soap
             };
             return envelope;
         }
+
+        /// <summary>Loads a SOAP envelope from a <see cref="Stream"/>.</summary>
+        public static SoapEnvelope<TBody> Load<TBody>(Stream stream)
+            where TBody : class
+        {
+            Guard.NotNull(stream, nameof(stream));
+
+            using var reader = XmlReader.Create(stream, SoapXml.ReaderSettings);
+
+            var serializer = new XmlSerializer(typeof(SoapEnvelope<TBody>));
+
+            return (SoapEnvelope<TBody>)serializer.Deserialize(reader);
+        }
+
+        /// <summary>Loads a SOAP envelope from a <see cref="Stream"/>.</summary>
+        public static SoapEnvelope<THeader, TBody> Load<THeader, TBody>(Stream stream)
+            where THeader : class
+            where TBody : class
+        {
+            Guard.NotNull(stream, nameof(stream));
+
+            using var reader = XmlReader.Create(stream, SoapXml.ReaderSettings);
+
+            var serializer = new XmlSerializer(typeof(SoapEnvelope<THeader, TBody>));
+
+            return (SoapEnvelope<THeader, TBody>)serializer.Deserialize(reader);
+        }
     }
 }
