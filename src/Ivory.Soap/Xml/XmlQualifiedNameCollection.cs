@@ -44,6 +44,23 @@ namespace Ivory.Soap.Xml
             return this;
         }
 
+        /// <summary>Updates the prefix of the qualified name with the specified namespace.</summary>
+        /// <param name="newPrefix">
+        /// The new prefix for namespace.
+        /// </param>
+        /// <param name="namespace">
+        /// The namespace of the qualified name.
+        /// </param>
+        public XmlQualifiedNameCollection UpdatePrefix(string newPrefix, string @namespace)
+        {
+            var existing = collection.Where(qn => qn.Namespace == @namespace).ToArray();
+            for (var i = 0; i < existing.Length; i++)
+            {
+                Remove(existing[i]);
+            }
+            return Add(newPrefix, @namespace);
+        }
+
         /// <summary>Represents qualified names as <see cref="XmlSerializerNamespaces"/>.</summary>
         public XmlSerializerNamespaces ToSerializerNamespaces()
         {
