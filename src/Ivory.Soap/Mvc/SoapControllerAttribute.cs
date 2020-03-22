@@ -18,36 +18,22 @@ namespace Ivory.Soap.Mvc
         /// <param name="route">
         /// The optional route; default: "/".
         /// </param>
-        /// <param name="namespace">
-        /// The optional SOAP namespace. If not specified, the default linked 
-        /// to the SOAP version is used.
-        /// </param>
         public SoapControllerAttribute(
             SoapVersion version = SoapVersion.V1_1,
-            string route = null,
-            string @namespace = null)
+            string route = null)
         {
             Version = version;
-            Namespace = @namespace ?? "http://schemas.xmlsoap.org/soap/envelope/";
             Route = route ?? "/";
-            WriterSettings = new SoapWriterSettings
-            {
-                SoapVersion = Version,
-                Namespace = Namespace,
-            };
         }
 
         /// <summary>Gets the SOAP version.</summary>
         public SoapVersion Version { get; }
 
-        /// <summary>Gets the SOAP namespace.</summary>
-        public string Namespace { get; set; }
-
         /// <summary>Gets the route to the SOAP endpoint.</summary>
         public string Route { get; }
 
         /// <summary>Gets the SOAP writer settings.</summary>
-        internal SoapWriterSettings WriterSettings { get; }
+        internal SoapWriterSettings WriterSettings { get; } = new SoapWriterSettings();
 
         #region Routing via IRouteTemplateProvider
 

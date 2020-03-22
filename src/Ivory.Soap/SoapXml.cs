@@ -1,15 +1,16 @@
-﻿using System.Text;
+﻿using Ivory.Soap.Xml;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace Ivory.Soap
 {
     /// <summary>SOAP XML helper class.</summary>
-    public static class SoapXml
+    internal static class SoapXml
     {
-        /// <summary>Gets an <see cref="XmlSerializerNamespaces"/> with only the empty namespace.</summary>
-        internal static readonly XmlSerializerNamespaces EmptyNamespace = new XmlSerializerNamespaces()
-            .AddNs(string.Empty, null);
+        internal static readonly XmlSerializerNamespaces Empty = new XmlQualifiedNameCollection()
+            .Add(string.Empty, null)
+            .ToSerializerNamespaces();
 
         /// <summary>Gets the <see cref="XmlWriterSettings"/> to write SOAP with.</summary>
         internal static readonly XmlWriterSettings WriterSettings = new XmlWriterSettings
@@ -29,13 +30,5 @@ namespace Ivory.Soap
         {
             Async = false,
         };
-
-        /// <summary>Adds a namespace to the <see cref="XmlSerializerNamespaces"/> fluently.</summary>
-        public static XmlSerializerNamespaces AddNs(this XmlSerializerNamespaces namespaces, string prefix, string ns)
-        {
-            Guard.NotNull(namespaces, nameof(namespaces));
-            namespaces.Add(prefix, ns);
-            return namespaces;
-        }
     }
 }

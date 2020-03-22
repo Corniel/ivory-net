@@ -55,7 +55,12 @@ namespace Ivory.Soap.UnitTests
             Console.WriteLine(expected);
             Console.WriteLine();
 
-            using var context = WriterContext.Create(new SoapWriterSettings());
+            var settings = new SoapWriterSettings();
+            settings.QualifiedNames
+                .Add("complex", "http://ivory.net/compex")
+                .Add("m", "http://ivory.net/compex-mood");
+
+            using var context = WriterContext.Create(settings);
 
             var envelope = SoapEnvelope.New(
                 header: new SimpleHeader

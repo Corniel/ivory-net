@@ -1,11 +1,11 @@
-<soap:Envelope encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+<soap:Envelope xmlns:complex="http://ivory.net/compex" xmlns:m="http://ivory.net/compex-mood" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Header>
     <SimpleHeader>
       <Message>Wash your hands!</Message>
     </SimpleHeader>
   </soap:Header>
   <soap:Body>
-    <complex:Complex p3:mood="Mellow" xmlns:p3="http://ivory.net/compex-mood" xmlns:complex="http://ivory.net/compex">
+    <complex:Complex m:mood="Mellow">
       <complex:Answer>42</complex:Answer>
     </complex:Complex>
   </soap:Body>

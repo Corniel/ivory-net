@@ -67,7 +67,7 @@ namespace Ivory.Soap
 
             foreach (var item in this)
             {
-                serializer.Serialize(writer, item, SoapXml.EmptyNamespace);
+                serializer.Serialize(writer, item, SoapXml.Empty);
             }
         }
     }

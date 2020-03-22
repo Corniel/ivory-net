@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Ivory.Soap
@@ -31,11 +32,7 @@ namespace Ivory.Soap
             using var writer = XmlWriter.Create(stream, SoapXml.WriterSettings);
 
             var serializer = new XmlSerializer(GetType());
-
-            var ns = new XmlSerializerNamespaces()
-                .AddNs(settings.NamespacePrefix, settings.Namespace);
-
-            serializer.Serialize(writer, this, ns);
+            serializer.Serialize(writer, this, settings.QualifiedNames.ToSerializerNamespaces());
 
             writer.Flush();
         }
