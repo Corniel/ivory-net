@@ -13,7 +13,6 @@ namespace Ivory.Soap
         where TBody : class
     {
         /// <summary>Gets and sets the SOAP body.</summary>
-        [XmlElement(Order = 1)]
         public SoapContent<TBody> Body { get; set; }
     }
 }

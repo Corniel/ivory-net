@@ -47,5 +47,32 @@ namespace Ivory.Soap.UnitTests
 
             Assert.AreEqual(expected, context.Content);
         }
+
+        [Test]
+        public void Save_HeaderWithComplexBody_ValidSoapV1_1()
+        {
+            var expected = Message.EmbeddedText("HeaderWithComplexBody_v1.1.xml");
+            Console.WriteLine(expected);
+            Console.WriteLine();
+
+            using var context = WriterContext.Create(new SoapWriterSettings());
+
+            var envelope = SoapEnvelope.New(
+                header: new SimpleHeader
+                {
+                    Message = "Wash your hands!",
+                },
+                body: new ComplexBody
+                {
+                    Answer = 42,
+                    Mood = "Mellow",
+                });
+
+            envelope.Save(context.Stream, context.Settings);
+
+            Console.WriteLine(context.Content);
+
+            Assert.AreEqual(expected, context.Content);
+        }
     }
 }
