@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace Ivory.SoapApi.Controllers
 {
-    [SoapController(version: SoapVersion.V1_1)]
+    [SoapController(version: SoapVersion.V1_1, route: "/")]
     public class ExampleSoapController : ControllerBase
     {
         [SoapAction("http://ivory.net/with-header")]
