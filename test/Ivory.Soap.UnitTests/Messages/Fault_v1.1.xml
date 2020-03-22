@@ -1,0 +1,9 @@
+<soap:Envelope encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>Client</faultcode>
+      <faultstring>Oops!</faultstring>
+      <faultactor>Not me</faultactor>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>

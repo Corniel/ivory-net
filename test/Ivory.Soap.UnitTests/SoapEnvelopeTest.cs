@@ -24,5 +24,28 @@ namespace Ivory.Soap.UnitTests
 
             Assert.AreEqual(expected, context.Content);
         }
+
+        [Test]
+        public void Save_Fault_ValidSoapV1_1()
+        {
+            var expected = Message.EmbeddedText("Fault_v1.1.xml");
+            Console.WriteLine(expected);
+            Console.WriteLine();
+
+            using var context = WriterContext.Create(new SoapWriterSettings());
+
+            var envelope = SoapEnvelope.Fault(
+                new SoapFault(SoapFaultCode.Client, "Oops!")
+                { 
+                    FaultActor = "Not me",
+                });
+
+            envelope.Save(context.Stream, context.Settings);
+
+            Console.WriteLine(context.Content);
+
+
+            Assert.AreEqual(expected, context.Content);
+        }
     }
 }

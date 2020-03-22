@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace Ivory.Soap.Handlers
 {
+    /// <summary>SOAP fault handler.</summary>
     public static class SoapFaultHandler
     {
+        /// <summary>Handles a SOAP Fault.</summary>
         public static Task Handle(HttpContext context)
         {
             Guard.NotNull(context, nameof(context));
@@ -20,10 +21,9 @@ namespace Ivory.Soap.Handlers
                 return Task.CompletedTask;
             }
 
-            var fault = new SoapFault
+            var fault = new SoapFault(SoapFaultCode.Server, ex.Error.Message)
             {
-                FaultCode = SoapFaultCode.Server,
-                FaultString = ex.Error.Message,
+                FaultActor = "Not me",
             };
 
             var message = SoapEnvelope.Fault(fault);
