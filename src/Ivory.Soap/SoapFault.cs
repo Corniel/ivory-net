@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Ivory.Soap.Extensions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -16,5 +19,15 @@ namespace Ivory.Soap
         /// <summary>Gets the SOAP fault string.</summary>
         [XmlElement("faultstring", Namespace = "", Order = 1)]
         public string FaultString { get; set; }
+
+        public static SoapFault FromModelState(ModelStateDictionary modelState)
+        {
+            var error = modelState.GetErrors().FirstOrDefault();
+            return new SoapFault
+            {
+                FaultCode = SoapFaultCode.Client,
+                FaultString = error?.Message,
+            };
+        }
     }
 }

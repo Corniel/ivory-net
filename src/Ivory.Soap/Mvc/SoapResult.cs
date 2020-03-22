@@ -4,14 +4,21 @@
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace Ivory.Soap.Mvc
 {
     /// <summary>Represents a SOAP envelope <see cref="IActionResult"/>.</summary>
-    public class SoapResult : IActionResult
+    /// <typeparam name="THeader">
+    /// The type of the header content.
+    /// </typeparam>
+    /// <typeparam name="TBody">
+    /// The type of the body content.
+    /// </typeparam>
+    public class SoapResult<THeader, TBody> : IActionResult
+        where THeader : class
+        where TBody : class
     {
-        /// <summary>Initializes a new instance of the <see cref="SoapResult"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="SoapResult{THeader, TBody}"/> class.</summary>
         /// <param name="header">
         /// The SOAP header.
         /// </param>
@@ -21,7 +28,7 @@ namespace Ivory.Soap.Mvc
         /// <param name="settings">
         /// The settings to use.
         /// </param>
-        public SoapResult(object header, object body, SoapWriterSettings settings)
+        public SoapResult(THeader header, TBody body, SoapWriterSettings settings)
         {
             Header = header;
             Body = body;
@@ -29,10 +36,10 @@ namespace Ivory.Soap.Mvc
         }
 
         /// <summary>Gets the SOAP header.</summary>
-        public object Header { get; }
+        public THeader Header { get; }
 
         /// <summary>Gets the SOAP body.</summary>
-        public object Body { get; }
+        public TBody Body { get; }
 
         /// <summary>Gets the <see cref="SoapWriterSettings"/> to use.</summary>
         protected SoapWriterSettings Settings { get; }
@@ -48,13 +55,25 @@ namespace Ivory.Soap.Mvc
             Guard.NotNull(context, nameof(context));
 
             var buffer = new MemoryStream();
-            var writer = XmlWriter.Create(buffer, Settings);
-            var message = new So(Header, Body);
-            message.Save(writer, Settings);
+            var message = new SoapEnvelope<THeader, TBody>();
+
+            if (Header != null)
+            {
+                message.Header = new SoapHeader<THeader>
+                {
+                    Header,
+                };
+            }
+            if (Body != null)
+            {
+                message.Body.Add(Body);
+            }
+
+            message.Save(buffer, Settings);
 
             buffer.Position = 0;
 
-            if (Body is SoapFault fault)
+            if (Body is SoapFault)
             {
                 context.HttpContext.Response.StatusCode = 500;
             }

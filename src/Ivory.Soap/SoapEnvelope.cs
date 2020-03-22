@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Ivory.Soap
@@ -17,7 +19,26 @@ namespace Ivory.Soap
 
         /// <summary>Gets and sets the SOAP body.</summary>
         [XmlElement(Order = 1)]
-        public SoapBody<TBody> Body { get; set; }
+        public SoapBody<TBody> Body { get; set; } = new SoapBody<TBody>();
+
+        /// <summary>Saves the SOAP envelope to a <see cref="Stream"/>.</summary>
+        /// <param name="stream">
+        /// The stream to save to.
+        /// </param>
+        /// <param name="settings">
+        /// The settings to apply.
+        /// </param>
+        public void Save(Stream stream, SoapWriterSettings settings)
+        {
+            Guard.NotNull(stream, nameof(stream));
+            settings ??= SoapWriterSettings.V1_1;
+
+            var writer = XmlWriter.Create(stream, settings);
+            var serializer = new XmlSerializer(GetType(), "");
+            serializer.Serialize(writer, this);
+
+            writer.Flush();
+        }
     }
 
     /// <summary>Represents the SOAP envelope.</summary>

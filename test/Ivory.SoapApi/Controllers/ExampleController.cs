@@ -21,13 +21,13 @@ namespace Ivory.SoapApi.Controllers
         public IActionResult WithoutHeader(SimpleBody body)
         {
             body.Value++;
-            return this.Soap(body: body);
+            return this.Soap<SimpleHeader, SimpleBody>(body: body);
         }
 
         [SoapAction("http://ivory.net/xml")]
         public IActionResult Xml(XElement body)
         {
-            return this.Soap(body: body);
+            return this.Soap<XElement, XElement>(body: body);
         }
 
         [SoapAction("http://ivory.net/exception")]

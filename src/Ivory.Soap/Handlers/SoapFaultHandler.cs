@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -19,22 +20,21 @@ namespace Ivory.Soap.Handlers
                 return Task.CompletedTask;
             }
 
-            var fault = new SoapFault1_2
+            var fault = new SoapFault
             {
-                Code = SoapFaultCode.Server,
-                Subcode = ex.Error.GetType().Name,
-                Reason = ex.Error.Message,
+                FaultCode = SoapFaultCode.Server,
+                FaultString = ex.Error.Message,
             };
 
-            var message = new SoapMessage(header: null, body: fault);
+            var message = new SoapEnvelope<SoapFault>();
+            message.Body.Add(fault);
 
-            var buffer = new StringBuilder();
+            var buffer = new MemoryStream();
             var settings = SoapWriterSettings.V1_1;
-            var writer = XmlWriter.Create(buffer, settings);
+            message.Save(buffer, settings);
+            buffer.Position = 0;
 
-            message.Save(writer, settings);
-
-            return context.Response.WriteAsync(buffer.ToString(), default);
+            return context.Response.WriteAsync(Encoding.UTF8.GetString(buffer.ToArray()), default);
         }
     }
 }

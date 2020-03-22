@@ -75,9 +75,9 @@ namespace Ivory.Soap.Mvc
 
             if (!context.ModelState.IsValid)
             {
-                context.Result = new SoapResult(
+                context.Result = new SoapResult<SoapFault, SoapFault>(
                     header: null,
-                    body: SoapFault1_1.FromModelState(context.ModelState),
+                    body: SoapFault.FromModelState(context.ModelState),
                     settings: WriterSettings
                 );
             }

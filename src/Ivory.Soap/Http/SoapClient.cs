@@ -63,18 +63,20 @@ namespace Ivory.Soap.Http
         /// <returns>
         /// The task object representing the asynchronous operation.
         /// </returns>
-        public static Task<HttpResponseMessage> PostSoapAsync(
+        public static Task<HttpResponseMessage> PostSoapAsync<THeader, TBody>(
             this HttpClient httpClient,
             Uri requestUri,
             string soapAction,
-            object header,
-            object body,
+            THeader header,
+            TBody body,
             CancellationToken cancellationToken)
+            where THeader : class
+            where TBody : class
         {
             Guard.NotNull(httpClient, nameof(httpClient));
 
             httpClient.DefaultRequestHeaders.Add(SoapRequest.ActionHeader, soapAction);
-            var content = new SoapHttpContent(header, body);
+            var content = new SoapHttpContent<THeader, TBody>(header, body);
             return httpClient.PostAsync(requestUri, content, cancellationToken);
         }
     }

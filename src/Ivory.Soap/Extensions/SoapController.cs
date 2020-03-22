@@ -26,17 +26,19 @@ namespace Microsoft.AspNetCore.Mvc
         /// The optional settings.
         /// </param>
         /// <returns>
-        /// The created <see cref="SoapResult"/> for the response.
+        /// The created <see cref="SoapResult{THeader, TBody}"/> for the response.
         /// </returns>
-        public static SoapResult Soap(
+        public static SoapResult<THeader, TBody> Soap<THeader, TBody>(
             this ControllerBase controller,
-            object header = null,
-            object body = null,
+            THeader header = null,
+            TBody body = null,
             SoapWriterSettings settings = null)
+            where THeader : class
+            where TBody : class
         {
             Guard.NotNull(controller, nameof(controller));
 
-            return new SoapResult(header, body, settings ?? FromDeclaration(controller));
+            return new SoapResult<THeader, TBody>(header, body, settings ?? FromDeclaration(controller));
         }
 
         private static SoapWriterSettings FromDeclaration(object controller)

@@ -7,7 +7,9 @@ using System.Xml;
 namespace Ivory.Soap.Http
 {
     /// <summary>Represents a SOAP envelope <see cref="HttpContent"/>.</summary>
-    public class SoapHttpContent : HttpContent
+    public class SoapHttpContent<THeader, TBody> : HttpContent
+        where THeader : class
+        where TBody : class
     {
         /// <summary>Initializes a new instance of the <see cref="SoapHttpContent"/> class.</summary>
         /// <param name="header">
@@ -16,26 +18,34 @@ namespace Ivory.Soap.Http
         /// <param name="body">
         /// The SOAP body.
         /// </param>
-        public SoapHttpContent(object header, object body)
+        public SoapHttpContent(THeader header, TBody body)
         {
             Header = header;
             Body = body;
         }
         /// <summary>Gets the SOAP header.</summary>
-        public object Header { get; }
+        public THeader Header { get; }
 
         /// <summary>Gets the SOAP body.</summary>
-        public object Body { get; }
+        public TBody Body { get; }
 
         /// <inheritdoc/>
         protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             Guard.NotNull(stream, nameof(stream));
 
-            var writer = XmlWriter.Create(stream, WriterSettings);
-            var message = new SoapMessage(Header, Body);
-            message.Save(writer, WriterSettings);
-            writer.Flush();
+            var message = new SoapEnvelope<THeader, TBody>();
+
+            if (Header != null)
+            {
+                message.Header = new SoapHeader<THeader>
+                {
+                    Header,
+                };
+            }
+            message.Body.Add(Body);
+
+            message.Save(stream, WriterSettings);
 
             return Task.CompletedTask;
         }
