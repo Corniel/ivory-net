@@ -5,14 +5,14 @@ using System.Xml.Serialization;
 
 namespace Ivory.Soap
 {
-    /// <summary>Helper method for creating <see cref="SoapBody{TBody}"/> and
+    /// <summary>Helper method for creating <see cref="SoapEnvelope{TBody}"/> and
     /// <see cref="SoapEnvelope{THeader, TBody}"/>.
     /// </summary>
     public class SoapEnvelope
     {
         /// <summary>Gets and sets the SOAP encoding style.</summary>
         [XmlAttribute("encodingStyle")]
-        public string EncodingStyle { get; set; } = "http://schemas.xmlsoap.org/soap/encoding/";
+        public string EncodingStyle { get; set; }
 
         /// <summary>Saves the SOAP envelope to a <see cref="Stream"/>.</summary>
         /// <param name="stream">
@@ -26,9 +26,17 @@ namespace Ivory.Soap
             Guard.NotNull(stream, nameof(stream));
             settings ??= SoapWriterSettings.V1_1;
 
-            var writer = XmlWriter.Create(stream, settings);
+            EncodingStyle = settings.EncodingStyle;
+
+            using var writer = XmlWriter.Create(stream, settings);
+
             var serializer = new XmlSerializer(GetType(), string.Empty);
-            serializer.Serialize(writer, this);
+
+            var ns = new XmlSerializerNamespaces();
+            ns.Add(settings.NamespacePrefix, settings.Namespace);
+            ns.Add(string.Empty, string.Empty);
+
+            serializer.Serialize(writer, this, ns);
 
             writer.Flush();
         }
@@ -38,11 +46,18 @@ namespace Ivory.Soap
             where THeader : class
             where TBody : class
         {
-            Guard.NotNull(body, nameof(body));
-
             var envelope = new SoapEnvelope<THeader, TBody>();
-
-            envelope.Body.Add(body);
+            if (header != null)
+            {
+                envelope.Header = new SoapContent<THeader>
+                {
+                    header,
+                };
+            }
+            if (body != null)
+            {
+                envelope.Body.Add(body);
+            }
             return envelope;
         }
 

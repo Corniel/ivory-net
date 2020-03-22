@@ -16,6 +16,6 @@ namespace Ivory.Soap
     {
         /// <summary>Gets and sets the SOAP body.</summary>
         [XmlElement(Order = 0)]
-        public SoapHeader<THeader> Header { get; set; }
+        public SoapContent<THeader> Header { get; set; }
     }
 }

@@ -36,13 +36,16 @@ namespace Ivory.Soap
         }
 
         /// <summary>Gets or sets the namespace prefix for the SOAP namespace.</summary>
-        public string NamespacePrefix { get; set; } = string.Empty;
+        public string NamespacePrefix { get; set; } = "soap";
 
         /// <summary>Gets or sets the preferred SOAP version.</summary>
         public SoapVersion SoapVersion { get; set; } = SoapVersion.V1_2;
 
         /// <summary>Gets or sets the preferred SOAP version.</summary>
         public string Namespace { get; set; } = SoapVersion.V1_2.DefaultNamespace();
+
+        /// <summary>Gets and sets the SOAP encoding style.</summary>
+        public string EncodingStyle { get; set; } = "http://schemas.xmlsoap.org/soap/encoding/";
 
         /// <summary>Gets or sets a value indicating whether to omit an XML declaration.</summary>
         public bool OmitXmlDeclaration
