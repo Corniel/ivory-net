@@ -26,13 +26,6 @@ namespace System.Xml.Linq
                 return node;
             }
             var reader = node.CreateReader();
-
-            if (typeof(IXmlSerializable).IsAssignableFrom(type))
-            {
-                var xmlSerializable = (IXmlSerializable)Activator.CreateInstance(type);
-                xmlSerializable.ReadXml(reader);
-                return xmlSerializable;
-            }
             var serializer = new XmlSerializer(type);
             return serializer.Deserialize(reader);
         }
