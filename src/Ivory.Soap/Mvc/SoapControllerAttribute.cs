@@ -23,12 +23,12 @@ namespace Ivory.Soap.Mvc
         /// to the SOAP version is used.
         /// </param>
         public SoapControllerAttribute(
-            SoapVersion version,
+            SoapVersion version = SoapVersion.V1_1,
             string route = null,
             string @namespace = null)
         {
             Version = version;
-            Namespace = @namespace ?? version.DefaultNamespace();
+            Namespace = @namespace ?? "http://schemas.xmlsoap.org/soap/envelope/";
             Route = route ?? "/";
             WriterSettings = new SoapWriterSettings
             {

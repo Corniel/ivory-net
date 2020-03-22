@@ -2,6 +2,7 @@
 
 namespace Ivory.Soap
 {
+    /// <summary>SOAP request helper class.</summary>
     public static class SoapRequest
     {
         /// <summary>The name of the SOAP action header (SOAPAction).</summary>

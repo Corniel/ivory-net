@@ -14,7 +14,7 @@ namespace Ivory.Soap.UnitTests
             Console.WriteLine(expected);
             Console.WriteLine();
 
-            using var context = WriterContext.Create(SoapWriterSettings.V1_1);
+            using var context = WriterContext.Create(new SoapWriterSettings());
 
             var envelope = SoapEnvelope.New(new SimpleBody { Value = 17 });
             envelope.Save(context.Stream, context.Settings);

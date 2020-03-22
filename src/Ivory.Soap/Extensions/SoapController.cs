@@ -64,11 +64,8 @@ namespace Microsoft.AspNetCore.Mvc
 
         private static SoapWriterSettings FromDeclaration(object controller)
         {
-            var attr = controller.GetType().GetCustomAttribute<SoapControllerAttribute>();
-
-            return attr is null
-                ? SoapWriterSettings.V1_2
-                : SoapWriterSettings.V1_1;
+            return controller.GetType().GetCustomAttribute<SoapControllerAttribute>()?.WriterSettings
+                ?? new SoapWriterSettings();
         }
     }
 }

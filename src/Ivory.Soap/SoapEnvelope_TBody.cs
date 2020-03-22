@@ -10,9 +10,10 @@ namespace Ivory.Soap
     [Serializable]
     [XmlRoot("Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
     public class SoapEnvelope<TBody> : SoapEnvelope
+        where TBody : class
     {
         /// <summary>Gets and sets the SOAP body.</summary>
         [XmlElement(Order = 1)]
-        public SoapContent<TBody> Body { get; set; } = new SoapContent<TBody>();
+        public SoapContent<TBody> Body { get; set; }
     }
 }

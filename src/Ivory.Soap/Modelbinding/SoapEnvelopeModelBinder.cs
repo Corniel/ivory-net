@@ -22,14 +22,9 @@ namespace Ivory.Soap.Modelbinding
 
             var envelope = await GetEnvelopeAsync(bindingContext);
 
-            if (bindingContext.ModelType == typeof(XDocument))
-            {
-                bindingContext.Result = ModelBindingResult.Success(envelope);
-            }
-            else
-            {
-                bindingContext.Result = ModelBindingResult.Success(envelope.Root.Deserialize(bindingContext.ModelType));
-            }
+            bindingContext.Result = bindingContext.ModelType == typeof(XDocument)
+                ? ModelBindingResult.Success(envelope)
+                : ModelBindingResult.Success(envelope.Root.Deserialize(bindingContext.ModelType));
         }
 
         /// <inheritdoc>/>

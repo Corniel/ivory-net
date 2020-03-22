@@ -24,17 +24,16 @@ namespace Ivory.Soap
         public void Save(Stream stream, SoapWriterSettings settings)
         {
             Guard.NotNull(stream, nameof(stream));
-            settings ??= SoapWriterSettings.V1_1;
+            Guard.NotNull(settings, nameof(settings));
 
             EncodingStyle = settings.EncodingStyle;
 
-            using var writer = XmlWriter.Create(stream, settings);
+            using var writer = XmlWriter.Create(stream, SoapXml.WriterSettings);
 
-            var serializer = new XmlSerializer(GetType(), string.Empty);
+            var serializer = new XmlSerializer(GetType());
 
-            var ns = new XmlSerializerNamespaces();
-            ns.Add(settings.NamespacePrefix, settings.Namespace);
-            ns.Add(string.Empty, string.Empty);
+            var ns = new XmlSerializerNamespaces()
+                .AddNs(settings.NamespacePrefix, settings.Namespace);
 
             serializer.Serialize(writer, this, ns);
 
@@ -49,15 +48,10 @@ namespace Ivory.Soap
             var envelope = new SoapEnvelope<THeader, TBody>();
             if (header != null)
             {
-                envelope.Header = new SoapContent<THeader>
-                {
-                    header,
-                };
+                envelope.Header = new SoapContent<THeader>(header);
             }
-            if (body != null)
-            {
-                envelope.Body.Add(body);
-            }
+            envelope.Body = new SoapContent<TBody>(body);
+
             return envelope;
         }
 
@@ -65,10 +59,12 @@ namespace Ivory.Soap
         public static SoapEnvelope<TBody> New<TBody>(params TBody[] bodies)
             where TBody : class
         {
-            var bs = Guard.HasAny(bodies?.Where(b => b != null), nameof(bodies));
+            var items = Guard.HasAny(bodies?.Where(b => b != null), nameof(bodies));
 
-            var envelope = new SoapEnvelope<TBody>();
-            envelope.Body.AddRange(bs);
+            var envelope = new SoapEnvelope<TBody>
+            {
+                Body = new SoapContent<TBody>(items),
+            };
             return envelope;
         }
     }

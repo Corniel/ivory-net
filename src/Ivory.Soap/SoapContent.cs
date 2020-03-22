@@ -7,10 +7,38 @@ using System.Xml.Serialization;
 namespace Ivory.Soap
 {
     /// <summary>Represents the SOAP content placeholder.</summary>
+    /// <remarks>
+    /// SOAP content implements <see cref="IXmlSerializable"/> so that it can
+    /// prevent its child(ren) from having the SOAP namespace.
+    /// </remarks>
     [Serializable]
-    [XmlRoot(Namespace = "")]
     public class SoapContent<TContent> : List<TContent>, IXmlSerializable
+        where TContent : class
     {
+        /// <summary>Initializes a new instance of the <see cref="SoapContent{TContent}"/> class.</summary>
+        public SoapContent() { }
+
+        /// <summary>Initializes a new instance of the <see cref="SoapContent{TContent}"/> class.</summary>
+        /// <param name="content">
+        /// The item to add.
+        /// </param>
+        public SoapContent(TContent content) : base(1)
+        {
+            if (content is TContent)
+            {
+                Add(content);
+            }
+        }
+
+        /// <summary>Initializes a new instance of the<see cref="SoapContent{TContent}"/> class.</summary>
+        /// <param name="content">
+        /// The items to add.
+        /// </param>
+        public SoapContent(IEnumerable<TContent> content)
+        {
+            AddRange(content);
+        }
+
         /// <inheritdoc/>
         public XmlSchema GetSchema() => null;
 
@@ -31,14 +59,11 @@ namespace Ivory.Soap
         public void WriteXml(XmlWriter writer)
         {
             Guard.NotNull(writer, nameof(writer));
-            var serializer = new XmlSerializer(typeof(TContent), string.Empty);
-
-            var ns = new XmlSerializerNamespaces();
-            ns.Add(string.Empty, string.Empty);
+            var serializer = new XmlSerializer(typeof(TContent));
 
             foreach (var item in this)
             {
-                serializer.Serialize(writer, item, ns);
+                serializer.Serialize(writer, item, SoapXml.EmptyNamespace);
             }
         }
     }

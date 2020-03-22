@@ -30,7 +30,7 @@ namespace Ivory.Soap.Handlers
             message.Body.Add(fault);
 
             var buffer = new MemoryStream();
-            var settings = SoapWriterSettings.V1_1;
+            var settings = new SoapWriterSettings();
             message.Save(buffer, settings);
             buffer.Position = 0;
 
