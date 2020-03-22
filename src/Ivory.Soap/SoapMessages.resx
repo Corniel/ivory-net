@@ -61,4 +61,10 @@
   <data name="MulitpleElements" xml:space="preserve">
     <value>Unexpected mulltiple '{0}' elements</value>
   </data>
+  <data name="NoBody" xml:space="preserve">
+    <value>The SOAP body node is missing.</value>
+  </data>
+  <data name="NoEnvelope" xml:space="preserve">
+    <value>The root is not a SOAP envelope node.</value>
+  </data>
 </root>

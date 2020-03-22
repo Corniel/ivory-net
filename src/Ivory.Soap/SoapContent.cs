@@ -36,6 +36,7 @@ namespace Ivory.Soap
         /// </param>
         public SoapContent(IEnumerable<TContent> content)
         {
+            Guard.NotNull(content, nameof(content));
             AddRange(content);
         }
 
@@ -51,7 +52,10 @@ namespace Ivory.Soap
             while (reader.Read())
             {
                 var item = (TContent)serializer.Deserialize(reader);
-                Add(item);
+                if (item != null)
+                {
+                    Add(item);
+                }
             }
         }
 

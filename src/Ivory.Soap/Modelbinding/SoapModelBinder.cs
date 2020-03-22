@@ -24,7 +24,10 @@ namespace Ivory.Soap.Modelbinding
 
             var container = await GetContainerAysnc(bindingContext);
 
-            if (container is null) { /* No valid SOAP */ }
+            if (container is null)
+            {
+                // Invalid state.
+            }
             else if (bindingContext.ModelType == typeof(XContainer))
             {
                 BindXContainer(bindingContext, container);
@@ -50,6 +53,11 @@ namespace Ivory.Soap.Modelbinding
         {
             Guard.NotNull(bindingContext, nameof(bindingContext));
 
+            if (!bindingContext.ModelState.IsValid)
+            {
+                return null;
+            }
+
             if (bindingContext.ModelState.TryGetValue("$envelope", out var entry))
             {
                 return (XDocument)entry.RawValue;
@@ -59,6 +67,17 @@ namespace Ivory.Soap.Modelbinding
             try
             {
                 var message = await XDocument.LoadAsync(stream, LoadOptions.None, default);
+
+                if (message.Root.Name.LocalName != "Envelope")
+                {
+                    bindingContext.ModelState.AddModelError("envelope", SoapMessages.NoEnvelope);
+                    return null;
+                }
+                if (message.Root.Element(message.Root.Name.Namespace + "Body").Elements()?.Any() != true)
+                {
+                    bindingContext.ModelState.AddModelError("envelope", SoapMessages.NoBody);
+                    return null;
+                }
                 bindingContext.ModelState.SetModelValue("$envelope", message, string.Empty);
                 return message;
             }

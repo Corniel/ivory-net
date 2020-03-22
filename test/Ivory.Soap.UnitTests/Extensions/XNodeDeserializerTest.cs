@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using Qowaiv;
+﻿using Ivory.SoapApi.Models;
+using NUnit.Framework;
 using System.Xml.Linq;
 
 namespace Ivory.Soap.UnitTests.Extensions
@@ -11,7 +11,7 @@ namespace Ivory.Soap.UnitTests.Extensions
         {
             XElement xText = null;
 
-            var deserialized = xText.Deserialize(typeof(PostalCode));
+            var deserialized = xText.Deserialize(typeof(SimpleBody));
             Assert.IsNull(deserialized);
         }
         [Test]
@@ -21,17 +21,6 @@ namespace Ivory.Soap.UnitTests.Extensions
             var deserialized = expected.Deserialize(typeof(XElement));
 
             Assert.AreSame(expected, deserialized);
-        }
-
-        [Test]
-        public void Deserialize_IXmlSerializable_IsDeserialzed()
-        {
-            var xText = new XElement("dummy", "2624DP");
-
-            var deserialized = xText.Deserialize(typeof(PostalCode));
-            var expected = PostalCode.Parse("2624DP");
-
-            Assert.AreEqual(expected, deserialized);
         }
     }
 }

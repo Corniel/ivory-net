@@ -26,8 +26,7 @@ namespace Ivory.Soap.Handlers
                 FaultString = ex.Error.Message,
             };
 
-            var message = new SoapEnvelope<SoapFault>();
-            message.Body.Add(fault);
+            var message = SoapEnvelope.Fault(fault);
 
             var buffer = new MemoryStream();
             var settings = new SoapWriterSettings();

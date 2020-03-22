@@ -68,5 +68,23 @@ namespace Ivory.Soap {
                 return ResourceManager.GetString("MulitpleElements", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SOAP body node is missing..
+        /// </summary>
+        internal static string NoBody {
+            get {
+                return ResourceManager.GetString("NoBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The root is not a SOAP envelope node..
+        /// </summary>
+        internal static string NoEnvelope {
+            get {
+                return ResourceManager.GetString("NoEnvelope", resourceCulture);
+            }
+        }
     }
 }

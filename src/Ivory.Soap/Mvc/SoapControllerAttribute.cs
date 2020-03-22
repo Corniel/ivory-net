@@ -65,7 +65,7 @@ namespace Ivory.Soap.Mvc
         /// <inheritdoc/>
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            
+            // Nothing to do (yet).
         }
 
         /// <inheritdoc/>
@@ -75,7 +75,7 @@ namespace Ivory.Soap.Mvc
 
             if (!context.ModelState.IsValid)
             {
-                var envelope = SoapEnvelope.New(SoapFault.FromModelState(context.ModelState));
+                var envelope = SoapEnvelope.Fault(SoapFault.FromModelState(context.ModelState));
                 context.Result = new SoapResult(envelope, WriterSettings);
             }
         }

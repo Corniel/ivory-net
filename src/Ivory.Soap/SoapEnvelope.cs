@@ -68,6 +68,9 @@ namespace Ivory.Soap
             return envelope;
         }
 
+        /// <summary>Creates a new SOAP fault envelope.</summary>
+        public static SoapEnvelope<SoapFault> Fault(SoapFault soapFault) => New(soapFault);
+
         /// <summary>Loads a SOAP envelope from a <see cref="Stream"/>.</summary>
         public static SoapEnvelope<TBody> Load<TBody>(Stream stream)
             where TBody : class
