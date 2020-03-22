@@ -18,11 +18,8 @@ namespace Ivory.Soap.Http
         /// <param name="soapAction">
         /// The SOAP action to apply.
         /// </param>
-        /// <param name="header">
-        /// The (optional) SOAP header.
-        /// </param>
-        /// <param name="body">
-        /// The SOAP body.
+        /// <param name="envelope">
+        /// The SOAP envelope.
         /// </param>
         /// <returns>
         /// The task object representing the asynchronous operation.
@@ -31,10 +28,9 @@ namespace Ivory.Soap.Http
            this HttpClient httpClient,
            Uri requestUri,
            string soapAction,
-           object header,
-           object body)
+           SoapEnvelope envelope)
         {
-            return httpClient.PostSoapAsync(requestUri, soapAction, header, body, default);
+            return httpClient.PostSoapAsync(requestUri, soapAction, envelope, default);
         }
 
         /// <summary>
@@ -50,11 +46,8 @@ namespace Ivory.Soap.Http
         /// <param name="soapAction">
         /// The SOAP action to apply.
         /// </param>
-        /// <param name="header">
-        /// The (optional) SOAP header.
-        /// </param>
-        /// <param name="body">
-        /// The SOAP body.
+        /// <param name="envelope">
+        /// The SOAP envelope.
         /// </param>
         /// <param name="cancellationToken">
         /// A cancellation token that can be used by other objects or threads to receive
@@ -63,20 +56,17 @@ namespace Ivory.Soap.Http
         /// <returns>
         /// The task object representing the asynchronous operation.
         /// </returns>
-        public static Task<HttpResponseMessage> PostSoapAsync<THeader, TBody>(
+        public static Task<HttpResponseMessage> PostSoapAsync(
             this HttpClient httpClient,
             Uri requestUri,
             string soapAction,
-            THeader header,
-            TBody body,
+            SoapEnvelope envelope,
             CancellationToken cancellationToken)
-            where THeader : class
-            where TBody : class
         {
             Guard.NotNull(httpClient, nameof(httpClient));
 
             httpClient.DefaultRequestHeaders.Add(SoapRequest.ActionHeader, soapAction);
-            var content = new SoapHttpContent<THeader, TBody>(header, body);
+            var content = new SoapHttpContent(envelope);
             return httpClient.PostAsync(requestUri, content, cancellationToken);
         }
     }

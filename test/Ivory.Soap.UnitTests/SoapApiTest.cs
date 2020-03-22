@@ -17,11 +17,12 @@ namespace Ivory.Soap.UnitTests
         {
             using var client = CreateClient();
 
-            var response = await client.PostSoapAsync<SimpleHeader, SimpleHeader>(
+            var envelope = SoapEnvelope.New<SimpleHeader, SimpleBody>(new SimpleHeader(), null);
+
+            var response = await client.PostSoapAsync(
                 requestUri: new Uri(@"/", UriKind.Relative),
                 soapAction: "http://ivory.net/with-header",
-                header: null,
-                body: new SimpleHeader(),
+                envelope: envelope,
                 cancellationToken: default);
 
             foreach(var header in response.Headers)
@@ -43,14 +44,15 @@ namespace Ivory.Soap.UnitTests
         {
             using var client = CreateClient();
 
-            var response = await client.PostSoapAsync<SimpleHeader, SimpleBody>(
+            var envelope = SoapEnvelope.New(new SimpleBody { Value = 16 });
+
+            var response = await client.PostSoapAsync(
                 requestUri: new Uri(@"/", UriKind.Relative),
                 soapAction: "http://ivory.net/without-header",
-                header: null,
-                body: new SimpleBody { Value = 16 },
+                envelope: envelope,
                 cancellationToken: default);
 
-            //Console.WriteLine(await response.Content.ReadAsStringAsync());
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
 
             //var message =await SoapMessage.LoadAsync(await response.Content.ReadAsStreamAsync(), typeof(XElement), typeof(SimpleBody));
 
@@ -64,12 +66,12 @@ namespace Ivory.Soap.UnitTests
         public async Task CallActtion_IvoryNetException_ReturnsSoapFault()
         {
             using var client = CreateClient();
+            var envelope = SoapEnvelope.New(new SimpleBody { Value = 666 });
 
-            var response = await client.PostSoapAsync<SimpleHeader, SimpleBody>(
+            var response = await client.PostSoapAsync(
                 requestUri: new Uri(@"/", UriKind.Relative),
                 soapAction: "http://ivory.net/exception",
-                header: null,
-                body: new SimpleBody { Value = 666 },
+                envelope: envelope,
                 cancellationToken: default);
 
             Console.WriteLine(await response.Content.ReadAsStringAsync());

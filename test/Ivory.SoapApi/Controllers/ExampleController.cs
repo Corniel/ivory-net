@@ -14,20 +14,26 @@ namespace Ivory.SoapApi.Controllers
         public IActionResult WithHeader(SimpleHeader header, SimpleBody body)
         {
             body.Value++;
-            return this.Soap(header: header, body: body);
+            return this.Soap(header, body);
         }
 
         [SoapAction("http://ivory.net/without-header")]
         public IActionResult WithoutHeader(SimpleBody body)
         {
             body.Value++;
-            return this.Soap<SimpleHeader, SimpleBody>(body: body);
+            return this.Soap(body);
+        }
+
+        [SoapAction("http://ivory.net/xml-withHeader")]
+        public IActionResult XmlWithHeader(XElement header, XElement body)
+        {
+            return this.Soap(header: header, body: body);
         }
 
         [SoapAction("http://ivory.net/xml")]
         public IActionResult Xml(XElement body)
         {
-            return this.Soap<XElement, XElement>(body: body);
+            return this.Soap(body);
         }
 
         [SoapAction("http://ivory.net/exception")]

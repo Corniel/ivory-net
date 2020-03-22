@@ -16,29 +16,50 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="controller">
         /// The controller involved.
         /// </param>
+        /// <param name="bodies">
+        /// The SOAP body.
+        /// </param>
+        /// <returns>
+        /// The created <see cref="SoapResult"/> for the response.
+        /// </returns>
+        public static SoapResult Soap<TBody>(this ControllerBase controller, params TBody[] bodies)
+            where TBody : class
+        {
+            Guard.NotNull(controller, nameof(controller));
+
+            var evenlope = SoapEnvelope.New(bodies);
+
+            return new SoapResult(evenlope, FromDeclaration(controller));
+        }
+
+        /// <summary>Creates a <see cref="SoapResult"/> object by specifying
+        /// an (optional) header and body.
+        /// </summary>
+        /// <param name="controller">
+        /// The controller involved.
+        /// </param>
         /// <param name="header">
         /// The optional SOAP header.
         /// </param>
         /// <param name="body">
         /// The SOAP body.
         /// </param>
-        /// <param name="settings">
-        /// The optional settings.
-        /// </param>
         /// <returns>
-        /// The created <see cref="SoapResult{THeader, TBody}"/> for the response.
+        /// The created <see cref="SoapResult"/> for the response.
         /// </returns>
-        public static SoapResult<THeader, TBody> Soap<THeader, TBody>(
+        public static SoapResult Soap<THeader, TBody>(
             this ControllerBase controller,
-            THeader header = null,
-            TBody body = null,
-            SoapWriterSettings settings = null)
+            THeader header,
+            TBody body)
+
             where THeader : class
             where TBody : class
         {
             Guard.NotNull(controller, nameof(controller));
 
-            return new SoapResult<THeader, TBody>(header, body, settings ?? FromDeclaration(controller));
+            var evenlope = SoapEnvelope.New(header, body);
+
+            return new SoapResult(evenlope, FromDeclaration(controller));
         }
 
         private static SoapWriterSettings FromDeclaration(object controller)

@@ -75,11 +75,8 @@ namespace Ivory.Soap.Mvc
 
             if (!context.ModelState.IsValid)
             {
-                context.Result = new SoapResult<SoapFault, SoapFault>(
-                    header: null,
-                    body: SoapFault.FromModelState(context.ModelState),
-                    settings: WriterSettings
-                );
+                var envelope = SoapEnvelope.New(SoapFault.FromModelState(context.ModelState));
+                context.Result = new SoapResult(envelope, WriterSettings);
             }
         }
     }

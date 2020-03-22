@@ -14,32 +14,23 @@ namespace Ivory.Soap.Mvc
     /// <typeparam name="TBody">
     /// The type of the body content.
     /// </typeparam>
-    public class SoapResult<THeader, TBody> : IActionResult
-        where THeader : class
-        where TBody : class
+    public class SoapResult : IActionResult
     {
-        /// <summary>Initializes a new instance of the <see cref="SoapResult{THeader, TBody}"/> class.</summary>
-        /// <param name="header">
-        /// The SOAP header.
-        /// </param>
-        /// <param name="body">
-        /// The SOAP body.
+        /// <summary>Initializes a new instance of the <see cref="SoapResult"/> class.</summary>
+        /// <param name="envelope">
+        /// The SOAP envelope.
         /// </param>
         /// <param name="settings">
         /// The settings to use.
         /// </param>
-        public SoapResult(THeader header, TBody body, SoapWriterSettings settings)
+        public SoapResult(SoapEnvelope envelope, SoapWriterSettings settings)
         {
-            Header = header;
-            Body = body;
+            Envelope = Guard.NotNull(envelope, nameof(envelope));
             Settings = settings;
         }
 
-        /// <summary>Gets the SOAP header.</summary>
-        public THeader Header { get; }
-
-        /// <summary>Gets the SOAP body.</summary>
-        public TBody Body { get; }
+        /// <summary>Gets the SOAP envelope.</summary>
+        public SoapEnvelope Envelope { get; }
 
         /// <summary>Gets the <see cref="SoapWriterSettings"/> to use.</summary>
         protected SoapWriterSettings Settings { get; }
@@ -55,28 +46,15 @@ namespace Ivory.Soap.Mvc
             Guard.NotNull(context, nameof(context));
 
             var buffer = new MemoryStream();
-            var message = new SoapEnvelope<THeader, TBody>();
 
-            if (Header != null)
-            {
-                message.Header = new SoapHeader<THeader>
-                {
-                    Header,
-                };
-            }
-            if (Body != null)
-            {
-                message.Body.Add(Body);
-            }
-
-            message.Save(buffer, Settings);
+            Envelope.Save(buffer, Settings);
 
             buffer.Position = 0;
 
-            if (Body is SoapFault)
-            {
-                context.HttpContext.Response.StatusCode = 500;
-            }
+            //if (Envelope.Body is SoapFault)
+            //{
+            //    context.HttpContext.Response.StatusCode = 500;
+            //}
 
             return buffer.CopyToAsync(context.HttpContext.Response.Body);
         }

@@ -1,25 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace Ivory.Soap
 {
-    /// <summary>Represents the SOAP envelope.</summary>
-    /// <typeparam name="TBody">
-    /// The type of the body content.
-    /// </typeparam>
-    [Serializable]
-    [XmlRoot("Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
-    public class SoapEnvelope<TBody>
+    /// <summary>Helper method for creating <see cref="SoapBody{TBody}"/> and
+    /// <see cref="SoapEnvelope{THeader, TBody}"/>.
+    /// </summary>
+    public class SoapEnvelope
     {
         /// <summary>Gets and sets the SOAP encoding style.</summary>
         [XmlAttribute("encodingStyle")]
         public string EncodingStyle { get; set; } = "http://schemas.xmlsoap.org/soap/encoding/";
-
-        /// <summary>Gets and sets the SOAP body.</summary>
-        [XmlElement(Order = 1)]
-        public SoapBody<TBody> Body { get; set; } = new SoapBody<TBody>();
 
         /// <summary>Saves the SOAP envelope to a <see cref="Stream"/>.</summary>
         /// <param name="stream">
@@ -34,26 +27,34 @@ namespace Ivory.Soap
             settings ??= SoapWriterSettings.V1_1;
 
             var writer = XmlWriter.Create(stream, settings);
-            var serializer = new XmlSerializer(GetType(), "");
+            var serializer = new XmlSerializer(GetType(), string.Empty);
             serializer.Serialize(writer, this);
 
             writer.Flush();
         }
-    }
 
-    /// <summary>Represents the SOAP envelope.</summary>
-    /// <typeparam name="THeader">
-    /// The type of the header content.
-    /// </typeparam>
-    /// <typeparam name="TBody">
-    /// The type of the body content.
-    /// </typeparam>
-    [Serializable]
-    [XmlRoot("Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
-    public class SoapEnvelope<THeader, TBody> : SoapEnvelope<TBody>
-    {
-        /// <summary>Gets and sets the SOAP body.</summary>
-        [XmlElement(Order = 0)]
-        public SoapHeader<THeader> Header { get; set; }
+        /// <summary>Creates a new SOAP envelope with a header and a body.</summary>
+        public static SoapEnvelope<THeader, TBody> New<THeader, TBody>(THeader header, TBody body)
+            where THeader : class
+            where TBody : class
+        {
+            Guard.NotNull(body, nameof(body));
+
+            var envelope = new SoapEnvelope<THeader, TBody>();
+
+            envelope.Body.Add(body);
+            return envelope;
+        }
+
+        /// <summary>Creates a new SOAP envelope with one ore more bodies.</summary>
+        public static SoapEnvelope<TBody> New<TBody>(params TBody[] bodies)
+            where TBody : class
+        {
+            var bs = Guard.HasAny(bodies?.Where(b => b != null), nameof(bodies));
+
+            var envelope = new SoapEnvelope<TBody>();
+            envelope.Body.AddRange(bs);
+            return envelope;
+        }
     }
 }
