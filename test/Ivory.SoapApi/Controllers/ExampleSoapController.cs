@@ -11,33 +11,33 @@ namespace Ivory.SoapApi.Controllers
     public class ExampleSoapController : ControllerBase
     {
         [SoapAction("http://ivory.net/with-header")]
-        public IActionResult WithHeader(SimpleHeader header, SimpleBody body)
+        public IActionResult WithHeader(SimpleHeader header, [FromSoapBody]SimpleBody simple)
         {
-            body.Value++;
-            return this.Soap(header, body);
+            simple.Value++;
+            return this.Soap(header, simple);
         }
 
         [SoapAction("http://ivory.net/without-header")]
-        public IActionResult WithoutHeader(SimpleBody body)
+        public IActionResult WithoutHeader([FromBody]SimpleBody body)
         {
             body.Value++;
             return this.Soap(body);
         }
 
         [SoapAction("http://ivory.net/xml-withHeader")]
-        public IActionResult XmlWithHeader(XElement header, XElement body)
+        public IActionResult XmlWithHeader(XElement header, [FromSoapBody]XElement body)
         {
             return this.Soap(header: header, body: body);
         }
 
         [SoapAction("http://ivory.net/xml")]
-        public IActionResult Xml(XElement body)
+        public IActionResult Xml([FromSoapBody]XElement body)
         {
             return this.Soap(body);
         }
 
         [SoapAction("http://ivory.net/exception")]
-        public IActionResult Xml(SimpleBody body)
+        public IActionResult Xml([FromSoapBody]SimpleBody body)
         {
             throw new DivideByZeroException();
         }

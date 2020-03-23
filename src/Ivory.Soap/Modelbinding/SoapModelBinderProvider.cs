@@ -17,7 +17,7 @@ namespace Ivory.Soap.Modelbinding
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
             Guard.NotNull(context, nameof(context));
-            return binders.FirstOrDefault(b => b.CanBind(context.Metadata));
+            return binders.FirstOrDefault(b => b.BindingSource == context.Metadata.BindingSource);
         }
     }
 }

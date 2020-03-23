@@ -8,12 +8,7 @@ namespace Ivory.Soap.Modelbinding
     public class SoapBodyModelBinder : SoapModelBinder
     {
         /// <inheritdoc/>
-        public override bool CanBind(ModelMetadata metadata)
-        {
-            return metadata != null
-                && metadata.ParameterName == "body"
-                && BindingSourceIsBody(metadata);
-        }
+        public override BindingSource BindingSource => SoapBindingSource.SoapBody;
 
         /// <inheritdoc/>
         protected override async Task<XContainer> GetContainerAysnc(ModelBindingContext bindingContext)

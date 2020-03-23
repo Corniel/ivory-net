@@ -1,5 +1,6 @@
 ﻿using Ivory.Soap.Modelbinding;
 using Ivory.Soap.UnitTests.Mocking;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using NUnit.Framework;
 using System;
@@ -9,22 +10,49 @@ namespace Ivory.Soap.UnitTests.ModelBinding
 {
     public class SoapModelBinderProviderTest
     {
-        [TestCase(typeof(SoapEnvelopeModelBinder), "envelope")]
-        [TestCase(typeof(SoapHeaderModelBinder), "header")]
-        [TestCase(typeof(SoapBodyModelBinder), "body")]
-        [TestCase(null, "other")]
-        public void GetBinder(Type expected, string parameterName)
+        [Test]
+        public void GetBinder_SoapEnvelopeBindingSource_SoapHeaderModelBinder()
+        {
+            AssertModelBinider(typeof(SoapEnvelopeModelBinder), SoapBindingSource.SoapEnvelope);
+        }
+
+        [Test]
+        public void GetBinder_SoapHeaderBindingSource_SoapHeaderModelBinder()
+        {
+            AssertModelBinider(typeof(SoapHeaderModelBinder), SoapBindingSource.SoapHeader);
+        }
+
+        [Test]
+        public void GetBinder_SoapBodyBindingSource_SoapHeaderModelBinder()
+        {
+            AssertModelBinider(typeof(SoapBodyModelBinder), SoapBindingSource.SoapBody);
+        }
+
+        [Test]
+        public void GetBinder_BodyBindingSource_IsNull()
+        {
+            AssertModelBinider(null, BindingSource.Body);
+        }
+
+        [Test]
+        public void GetBinder_NullBindingSource_IsNull()
+        {
+            AssertModelBinider(null, BindingSource.Body);
+        }
+
+
+        private static void AssertModelBinider(Type expected, BindingSource bindingSource)
         {
             var provider = new SoapModelBinderProvider();
 
             var parameter = new ParameterInfoStub
             (
-                name: parameterName,
+                name: "param",
                 parameterType: typeof(XElement)
             );
 
             var identity = ModelMetadataIdentity.ForParameter(parameter);
-            var metadata = new ModelMetadataStub(identity);
+            var metadata = new ModelMetadataStub(identity, bindingSource: bindingSource);
             var context = new ModelBinderProviderContextStub(metadata);
             var binder = provider.GetBinder(context);
 

@@ -8,12 +8,7 @@ namespace Ivory.Soap.Modelbinding
     public class SoapEnvelopeModelBinder : SoapModelBinder
     {
         /// <inheritdoc/>
-        public override bool CanBind(ModelMetadata metadata)
-        {
-            return metadata != null
-                && metadata.ParameterName == "envelope"
-                && BindingSourceIsBody(metadata);
-        }
+        public override BindingSource BindingSource => SoapBindingSource.SoapEnvelope;
 
         /// <inheritdoc/>
         public override async Task BindModelAsync(ModelBindingContext bindingContext)

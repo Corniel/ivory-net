@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -11,11 +9,8 @@ namespace Ivory.Soap.Modelbinding
     /// <summary>Abstract SOAP model binder.</summary>
     public abstract class SoapModelBinder : IModelBinder
     {
-        /// <summary>Returns true if the <see cref="IModelBinder"/> can bind the model.</summary>
-        public abstract bool CanBind(ModelMetadata metadata);
-
-        /// <summary>Returns true if the binding source is <see cref="BindingSource.Body"/>.</summary>
-        protected static bool BindingSourceIsBody(ModelMetadata metadata) => metadata?.BindingSource is null || metadata.BindingSource == BindingSource.Body;
+        /// <summary>Returns the supported <see cref="Microsoft.AspNetCore.Mvc.ModelBinding.BindingSource"/>.</summary>
+        public abstract BindingSource BindingSource { get; }
 
         /// <inheritdoc/>
         public virtual async Task BindModelAsync(ModelBindingContext bindingContext)
