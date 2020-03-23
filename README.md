@@ -51,9 +51,9 @@ ASP.NET Core itself) is the registration of the `SoapModelBinder`.
 ## Model binding
 When the `SoapModelBinderProvider` has been registered, the model binding works
 when the parameter arguments are decorated with `FromSoapEnvelope`,
-`FromSoapHeader`, and `FromSoapBody`. The types of the parameters should be
+`FromSoapHeader`, or `FromSoapBody`. The types of the parameters should be
 decorated with  the `Serializable` attribute.
 
-An alternative is to use `CDocument` (only supported for the envelope) and
+An alternative is to use `XDocument` (only supported for the envelope) and
 `XContainer` (to support multiple header or body nodes), and `XElement`
 to retrieve exactly one header or body node.

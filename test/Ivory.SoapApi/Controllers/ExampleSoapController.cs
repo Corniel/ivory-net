@@ -1,4 +1,5 @@
-﻿using Ivory.Soap.Mvc;
+﻿using Ivory.Soap;
+using Ivory.Soap.Mvc;
 using Ivory.SoapApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -7,7 +8,7 @@ using System.Xml.Linq;
 namespace Ivory.SoapApi.Controllers
 {
     [SoapController(route: "/")]
-    public class ExampleSoapController : ControllerBase
+    public class ExampleSoapController : ControllerBase, ISoapController
     {
         [SoapAction("http://ivory.net/with-header")]
         public IActionResult WithHeader([FromSoapHeader]SimpleHeader header, [FromSoapBody]SimpleBody simple)
@@ -39,6 +40,17 @@ namespace Ivory.SoapApi.Controllers
         public IActionResult Xml([FromSoapBody]SimpleBody body)
         {
             throw new DivideByZeroException();
+        }
+
+        public SoapWriterSettings WriterSettings
+        {
+            get
+            {
+                var settings = new SoapWriterSettings();
+                settings.QualifiedNames.Add("extra", "http://ivory.net/soap-extra");
+
+                return settings;
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Ivory.Soap.Mvc
         public SoapResult(SoapEnvelope envelope, SoapWriterSettings settings)
         {
             Envelope = Guard.NotNull(envelope, nameof(envelope));
-            Settings = settings;
+            Settings = Guard.NotNull(settings, nameof(settings));
         }
 
         /// <summary>Gets the SOAP envelope.</summary>

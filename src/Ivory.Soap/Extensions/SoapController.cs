@@ -3,7 +3,6 @@
 using Ivory;
 using Ivory.Soap;
 using Ivory.Soap.Mvc;
-using System.Reflection;
 
 namespace Microsoft.AspNetCore.Mvc
 {
@@ -29,7 +28,7 @@ namespace Microsoft.AspNetCore.Mvc
 
             var evenlope = SoapEnvelope.New(bodies);
 
-            return new SoapResult(evenlope, FromDeclaration(controller));
+            return new SoapResult(evenlope, ResolveSettings(controller));
         }
 
         /// <summary>Creates a <see cref="SoapResult"/> object by specifying
@@ -59,12 +58,12 @@ namespace Microsoft.AspNetCore.Mvc
 
             var evenlope = SoapEnvelope.New(header, body);
 
-            return new SoapResult(evenlope, FromDeclaration(controller));
+            return new SoapResult(evenlope, ResolveSettings(controller));
         }
 
-        private static SoapWriterSettings FromDeclaration(object controller)
+        private static SoapWriterSettings ResolveSettings(object controller)
         {
-            return controller.GetType().GetCustomAttribute<SoapControllerAttribute>()?.WriterSettings
+            return SoapWriterSettings.FromController(controller)
                 ?? new SoapWriterSettings();
         }
     }

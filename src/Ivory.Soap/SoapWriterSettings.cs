@@ -1,4 +1,5 @@
-﻿using Ivory.Soap.Xml;
+﻿using Ivory.Soap.Mvc;
+using Ivory.Soap.Xml;
 
 namespace Ivory.Soap
 {
@@ -12,5 +13,13 @@ namespace Ivory.Soap
 
         /// <summary>Gets and sets the SOAP encoding style.</summary>
         public string EncodingStyle { get; set; } = "http://schemas.xmlsoap.org/soap/encoding/";
+
+        /// <summary>Gets the <see cref="SoapWriterSettings"/> from the controller if available.</summary>
+        public static SoapWriterSettings FromController(object controller)
+        {
+            return controller is ISoapController soapController
+                ? soapController.WriterSettings
+                : null;
+        }
     }
 }

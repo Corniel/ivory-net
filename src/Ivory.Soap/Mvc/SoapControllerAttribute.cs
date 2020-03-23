@@ -24,9 +24,6 @@ namespace Ivory.Soap.Mvc
         /// <summary>Gets the route to the SOAP endpoint.</summary>
         public string Route { get; }
 
-        /// <summary>Gets the SOAP writer settings.</summary>
-        internal SoapWriterSettings WriterSettings { get; } = new SoapWriterSettings();
-
         #region Routing via IRouteTemplateProvider
 
         ///// <inheritdoc/>
@@ -54,7 +51,8 @@ namespace Ivory.Soap.Mvc
             if (!context.ModelState.IsValid)
             {
                 var envelope = SoapEnvelope.Fault(SoapFault.FromModelState(context.ModelState));
-                context.Result = new SoapResult(envelope, WriterSettings);
+                var settings = SoapWriterSettings.FromController(context.Controller) ?? new SoapWriterSettings();
+                context.Result = new SoapResult(envelope, settings);
             }
         }
     }
