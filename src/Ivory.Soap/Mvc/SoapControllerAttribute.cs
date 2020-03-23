@@ -12,22 +12,14 @@ namespace Ivory.Soap.Mvc
         IActionFilter
     {
         /// <summary>Initializes a new instance of the <see cref="SoapControllerAttribute"/> class.</summary>
-        /// <param name="version">
-        /// the SOAP version to use.
-        /// </param>
+
         /// <param name="route">
         /// The optional route; default: "/".
         /// </param>
-        public SoapControllerAttribute(
-            SoapVersion version = SoapVersion.V1_1,
-            string route = null)
+        public SoapControllerAttribute(string route = null)
         {
-            Version = version;
             Route = route ?? "/";
         }
-
-        /// <summary>Gets the SOAP version.</summary>
-        public SoapVersion Version { get; }
 
         /// <summary>Gets the route to the SOAP endpoint.</summary>
         public string Route { get; }

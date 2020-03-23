@@ -10,9 +10,6 @@ namespace Ivory.Soap
             .Add("soap", "http://schemas.xmlsoap.org/soap/envelope/")
             .Add(string.Empty, null);
 
-        /// <summary>Gets or sets the preferred SOAP version.</summary>
-        public SoapVersion SoapVersion { get; set; } = SoapVersion.V1_1;
-
         /// <summary>Gets and sets the SOAP encoding style.</summary>
         public string EncodingStyle { get; set; } = "http://schemas.xmlsoap.org/soap/encoding/";
     }
