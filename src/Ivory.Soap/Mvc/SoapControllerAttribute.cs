@@ -12,17 +12,13 @@ namespace Ivory.Soap.Mvc
         IActionFilter
     {
         /// <summary>Initializes a new instance of the <see cref="SoapControllerAttribute"/> class.</summary>
-
-        /// <param name="route">
-        /// The optional route; default: "/".
-        /// </param>
-        public SoapControllerAttribute(string route = null)
+        public SoapControllerAttribute()
         {
-            Route = route ?? "/";
+            Route = "/";
         }
 
         /// <summary>Gets the route to the SOAP endpoint.</summary>
-        public string Route { get; }
+        public string Route { get; set; }
 
         #region Routing via IRouteTemplateProvider
 
@@ -34,7 +30,7 @@ namespace Ivory.Soap.Mvc
 
         ///// <inheritdoc/>
         string IRouteTemplateProvider.Template => Route;
-        
+
         #endregion
 
         /// <inheritdoc/>

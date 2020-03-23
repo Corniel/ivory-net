@@ -8,12 +8,6 @@ using System.Threading.Tasks;
 namespace Ivory.Soap.Mvc
 {
     /// <summary>Represents a SOAP envelope <see cref="IActionResult"/>.</summary>
-    /// <typeparam name="THeader">
-    /// The type of the header content.
-    /// </typeparam>
-    /// <typeparam name="TBody">
-    /// The type of the body content.
-    /// </typeparam>
     public class SoapResult : IActionResult
     {
         /// <summary>Initializes a new instance of the <see cref="SoapResult"/> class.</summary>
@@ -51,10 +45,7 @@ namespace Ivory.Soap.Mvc
 
             buffer.Position = 0;
 
-            //if (Envelope.Body is SoapFault)
-            //{
-            //    context.HttpContext.Response.StatusCode = 500;
-            //}
+            // TODO: context.HttpContext.Response.StatusCode = 500 on SOAP Fault
 
             return buffer.CopyToAsync(context.HttpContext.Response.Body);
         }

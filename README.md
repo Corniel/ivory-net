@@ -5,7 +5,7 @@ Ivory.NET SOAP is lightweight library on top of
 ## SOAP endpoint
 A custom controller could look like:
 ``` C#
-[SoapController(route: "/")]
+[SoapController(Route = "/")]
 public class CustomController : ControllerBase
 {
     [SoapAction("http://custom.org/custom-action")]

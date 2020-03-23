@@ -22,7 +22,7 @@ namespace Ivory.Soap.Modelbinding
                 : ModelBindingResult.Success(envelope.Root.Deserialize(bindingContext.ModelType));
         }
 
-        /// <inheritdoc>/>
+        /// <inheritdoc/>
         protected override async Task<XContainer> GetContainerAysnc(ModelBindingContext bindingContext)
         {
             return await GetEnvelopeAsync(bindingContext);
