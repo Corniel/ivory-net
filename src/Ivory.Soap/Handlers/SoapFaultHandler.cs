@@ -10,7 +10,10 @@ namespace Ivory.Soap.Handlers
     public static class SoapFaultHandler
     {
         /// <summary>Handles a SOAP Fault.</summary>
-        public static Task Handle(HttpContext context)
+        /// <param name="context">
+        /// The HTTP context.
+        /// </param>
+        public static Task HandleAsync(HttpContext context)
         {
             Guard.NotNull(context, nameof(context));
 

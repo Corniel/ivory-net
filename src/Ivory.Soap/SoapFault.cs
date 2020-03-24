@@ -12,6 +12,12 @@ namespace Ivory.Soap
     public class SoapFault
     {
         /// <summary>Initializes a new instance of the <see cref="SoapFault"/> class.</summary>
+        /// <param name="faultcode">
+        /// The SOAP fault code.
+        /// </param>
+        /// <param name="faultString">
+        /// The SOAP fault string.
+        /// </param>
         public SoapFault(SoapFaultCode faultcode, string faultString)
         {
             FaultCode = Guard.DefinedEnum(faultcode, nameof(faultcode));
@@ -21,15 +27,15 @@ namespace Ivory.Soap
         /// <summary>Initializes a new instance of the <see cref="SoapFault"/> class.</summary>
         public SoapFault() { }
 
-        /// <summary>Gets the SOAP fault code.</summary>
+        /// <summary>Gets or sets the SOAP fault code.</summary>
         [XmlElement("faultcode", Namespace = "", Order = 0)]
         public SoapFaultCode FaultCode { get; set; }
 
-        /// <summary>Gets the SOAP fault string.</summary>
+        /// <summary>Gets or sets the SOAP fault string.</summary>
         [XmlElement("faultstring", Namespace = "", Order = 1)]
         public string FaultString { get; set; }
 
-        /// <summary>Gets the SOAP fault string.</summary>
+        /// <summary>Gets or sets the SOAP fault string.</summary>
         [XmlElement("faultactor", Namespace = "", Order = 2)]
         public string FaultActor { get; set; }
 
@@ -37,8 +43,12 @@ namespace Ivory.Soap
         /// <remarks>
         /// The SOAP fault code is Client.
         /// </remarks>
+        /// <param name="modelState">
+        /// The model state.
+        /// </param>
         public static SoapFault FromModelState(ModelStateDictionary modelState)
         {
+            Guard.NotNull(modelState, nameof(modelState));
             var error = modelState.GetErrors().FirstOrDefault();
             return new SoapFault(SoapFaultCode.Client, error?.Message);
         }

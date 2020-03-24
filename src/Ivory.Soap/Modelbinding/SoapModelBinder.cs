@@ -9,7 +9,10 @@ namespace Ivory.Soap.Modelbinding
     /// <summary>Abstract SOAP model binder.</summary>
     public abstract class SoapModelBinder : IModelBinder
     {
-        /// <summary>Returns the supported <see cref="Microsoft.AspNetCore.Mvc.ModelBinding.BindingSource"/>.</summary>
+        /// <summary>Gets the supported <see cref="Microsoft.AspNetCore.Mvc.ModelBinding.BindingSource"/>.</summary>
+        /// <remarks>
+        /// Most likely a <see cref="SoapBindingSource"/>.
+        /// </remarks>
         public abstract BindingSource BindingSource { get; }
 
         /// <inheritdoc/>
@@ -38,9 +41,15 @@ namespace Ivory.Soap.Modelbinding
         }
 
         /// <summary>Gets the <see cref="XContainer"/> for the part to bind.</summary>
+        /// <param name="bindingContext">
+        /// The model binding context.
+        /// </param>
         protected abstract Task<XContainer> GetContainerAysnc(ModelBindingContext bindingContext);
 
         /// <summary>Gets the SOAP envelope.</summary>
+        /// <param name="bindingContext">
+        /// The model binding context.
+        /// </param>
         /// <remarks>
         /// The is result is always stored in the model state.
         /// </remarks>
@@ -68,11 +77,13 @@ namespace Ivory.Soap.Modelbinding
                     bindingContext.ModelState.AddModelError("envelope", SoapMessages.NoEnvelope);
                     return null;
                 }
+
                 if (message.Root.Element(message.Root.Name.Namespace + "Body").Elements()?.Any() != true)
                 {
                     bindingContext.ModelState.AddModelError("envelope", SoapMessages.NoBody);
                     return null;
                 }
+
                 bindingContext.ModelState.SetModelValue("$envelope", message, string.Empty);
                 return message;
             }
@@ -83,6 +94,7 @@ namespace Ivory.Soap.Modelbinding
             {
                 bindingContext.ModelState.AddModelError("envelope", x.Message);
             }
+
             return null;
         }
 

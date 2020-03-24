@@ -12,6 +12,9 @@ namespace Microsoft.AspNetCore.Mvc
         /// <summary>Creates a <see cref="SoapResult"/> object by specifying
         /// an (optional) header and body.
         /// </summary>
+        /// <typeparam name="TBody">
+        /// The type of the body content.
+        /// </typeparam>
         /// <param name="controller">
         /// The controller involved.
         /// </param>
@@ -34,6 +37,12 @@ namespace Microsoft.AspNetCore.Mvc
         /// <summary>Creates a <see cref="SoapResult"/> object by specifying
         /// an (optional) header and body.
         /// </summary>
+        /// <typeparam name="THeader">
+        /// The type of the header content.
+        /// </typeparam>
+        /// <typeparam name="TBody">
+        /// The type of the body content.
+        /// </typeparam>
         /// <param name="controller">
         /// The controller involved.
         /// </param>

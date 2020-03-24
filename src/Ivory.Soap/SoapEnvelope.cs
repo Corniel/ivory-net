@@ -10,7 +10,7 @@ namespace Ivory.Soap
     /// </summary>
     public class SoapEnvelope
     {
-        /// <summary>Gets and sets the SOAP encoding style.</summary>
+        /// <summary>Gets or sets the SOAP encoding style.</summary>
         [XmlAttribute("encodingStyle")]
         public string EncodingStyle { get; set; }
 
@@ -37,6 +37,18 @@ namespace Ivory.Soap
         }
 
         /// <summary>Creates a new SOAP envelope with a header and a body.</summary>
+        /// <typeparam name="THeader">
+        /// The type of the header content.
+        /// </typeparam>
+        /// <typeparam name="TBody">
+        /// The type of the body content.
+        /// </typeparam>
+        /// <param name="header">
+        /// The header of SOAP envelope.
+        /// </param>
+        /// <param name="body">
+        /// The body of SOAP envelope.
+        /// </param>
         public static SoapEnvelope<THeader, TBody> New<THeader, TBody>(THeader header, TBody body)
             where THeader : class
             where TBody : class
@@ -46,12 +58,19 @@ namespace Ivory.Soap
             {
                 envelope.Header = new SoapContent<THeader>(header);
             }
+
             envelope.Body = new SoapContent<TBody>(body);
 
             return envelope;
         }
 
         /// <summary>Creates a new SOAP envelope with one ore more bodies.</summary>
+        /// <typeparam name="TBody">
+        /// The type of the body content.
+        /// </typeparam>
+        /// <param name="bodies">
+        /// The body elements to add.
+        /// </param>
         public static SoapEnvelope<TBody> New<TBody>(params TBody[] bodies)
             where TBody : class
         {
@@ -65,9 +84,18 @@ namespace Ivory.Soap
         }
 
         /// <summary>Creates a new SOAP fault envelope.</summary>
+        /// <param name="soapFault">
+        /// The fault of SOAP envelope.
+        /// </param>
         public static SoapEnvelope<SoapFault> Fault(SoapFault soapFault) => New(soapFault);
 
         /// <summary>Loads a SOAP envelope from a <see cref="Stream"/>.</summary>
+        /// <typeparam name="TBody">
+        /// The type of the body content.
+        /// </typeparam>
+        /// <param name="stream">
+        /// The stream to load from.
+        /// </param>
         public static SoapEnvelope<TBody> Load<TBody>(Stream stream)
             where TBody : class
         {
@@ -81,6 +109,15 @@ namespace Ivory.Soap
         }
 
         /// <summary>Loads a SOAP envelope from a <see cref="Stream"/>.</summary>
+        /// <typeparam name="THeader">
+        /// The type of the header content.
+        /// </typeparam>
+        /// <typeparam name="TBody">
+        /// The type of the body content.
+        /// </typeparam>
+        /// <param name="stream">
+        /// The stream to load from.
+        /// </param>
         public static SoapEnvelope<THeader, TBody> Load<THeader, TBody>(Stream stream)
             where THeader : class
             where TBody : class

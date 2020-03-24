@@ -58,6 +58,7 @@ namespace Ivory.Soap.Xml
             {
                 Remove(existing[i]);
             }
+
             return Add(newPrefix, @namespace);
         }
 

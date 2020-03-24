@@ -16,6 +16,7 @@ namespace Ivory.Soap.Http
         {
             Envelope = Guard.NotNull(envelope, nameof(envelope));
         }
+
         /// <summary>Gets the SOAP envelope.</summary>
         public SoapEnvelope Envelope { get; }
 

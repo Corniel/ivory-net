@@ -17,18 +17,18 @@ namespace Ivory.Soap.Mvc
             Route = "/";
         }
 
-        /// <summary>Gets the route to the SOAP endpoint.</summary>
+        /// <summary>Gets or sets the route to the SOAP endpoint.</summary>
         public string Route { get; set; }
 
         #region Routing via IRouteTemplateProvider
 
-        ///// <inheritdoc/>
+        /// <inheritdoc/>
         string IRouteTemplateProvider.Name => Route;
 
-        ///// <inheritdoc/>
+        /// <inheritdoc/>
         int? IRouteTemplateProvider.Order => 0;
 
-        ///// <inheritdoc/>
+        /// <inheritdoc/>
         string IRouteTemplateProvider.Template => Route;
 
         #endregion

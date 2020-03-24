@@ -5,7 +5,7 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Version>0.0.1</Version>
     <IsPackable>true</IsPackable>
-		<CodeAnalysisRuleSet>..\..\rules\production.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRuleSet>..\..\Ivory.Net.ruleset</CodeAnalysisRuleSet>
 		<Authors>Jack Kester, Corniel Nobel</Authors>
 		<Product>Ivory.NET SOAP</Product>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>

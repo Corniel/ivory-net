@@ -27,10 +27,10 @@ namespace Ivory.Soap.Modelbinding
             Message = message;
         }
 
-        /// <summary>Gets and sets the field name.</summary>
+        /// <summary>Gets or sets the field name.</summary>
         public string FieldName { get; set; }
 
-        /// <summary>Gets and sets the binding error message.</summary>
+        /// <summary>Gets or sets the binding error message.</summary>
         public string Message { get; set; }
     }
 }

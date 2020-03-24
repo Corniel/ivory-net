@@ -12,7 +12,7 @@ namespace Ivory.Soap
     public class SoapEnvelope<TBody> : SoapEnvelope
         where TBody : class
     {
-        /// <summary>Gets and sets the SOAP body.</summary>
+        /// <summary>Gets or sets the SOAP body.</summary>
         public SoapContent<TBody> Body { get; set; }
     }
 }

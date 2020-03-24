@@ -15,6 +15,12 @@ namespace Ivory.Soap.Modelbinding
         public static readonly SoapBindingSource SoapBody = new SoapBindingSource(nameof(SoapBody), "SOAP body");
 
         /// <summary>Initializes a new instance of the <see cref="SoapBindingSource"/> class.</summary>
+        /// <param name="id">
+        /// The identifier of the binding source.
+        /// </param>
+        /// <param name="displayName">
+        /// The display name of the binding source.
+        /// </param>
         protected SoapBindingSource(string id, string displayName)
             : base(id, displayName, true, true) { }
     }

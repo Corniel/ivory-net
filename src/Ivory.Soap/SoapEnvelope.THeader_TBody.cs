@@ -16,11 +16,11 @@ namespace Ivory.Soap
         where THeader : class
         where TBody : class
     {
-        /// <summary>Gets and sets the SOAP body.</summary>
+        /// <summary>Gets or sets the SOAP body.</summary>
         [XmlElement(Order = 0)]
         public SoapContent<THeader> Header { get; set; }
 
-        /// <summary>Gets and sets the SOAP body.</summary>
+        /// <summary>Gets or sets the SOAP body.</summary>
         [XmlElement(Order = 1)]
         public SoapContent<TBody> Body { get; set; }
     }

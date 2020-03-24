@@ -10,7 +10,7 @@ namespace System.Xml.Linq
         /// The node to deserialize.
         /// </param>
         /// <param name="type">
-        /// The type to deserilize it too.
+        /// The type to deserialize it too.
         /// </param>
         /// <returns>
         /// A deserialized object.
@@ -21,10 +21,12 @@ namespace System.Xml.Linq
             {
                 return null;
             }
+
             if (node.GetType() == type)
             {
                 return node;
             }
+
             var reader = node.CreateReader();
             var serializer = new XmlSerializer(type);
             return serializer.Deserialize(reader);

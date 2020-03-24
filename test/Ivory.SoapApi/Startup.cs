@@ -32,7 +32,7 @@ namespace Ivory.SoapApi
         {
             app.UseExceptionHandler(options =>
             {
-                options.Run(context => SoapFaultHandler.Handle(context));
+                options.Run(context => SoapFaultHandler.HandleAsync(context));
             });
             app.UseHttpsRedirection();
             app.UseRouting();

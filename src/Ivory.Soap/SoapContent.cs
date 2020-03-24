@@ -7,6 +7,9 @@ using System.Xml.Serialization;
 namespace Ivory.Soap
 {
     /// <summary>Represents the SOAP content placeholder.</summary>
+    /// <typeparam name="TContent">
+    /// The type of the content.
+    /// </typeparam>
     /// <remarks>
     /// SOAP content implements <see cref="IXmlSerializable"/> so that it can
     /// prevent its child(ren) from having the SOAP namespace.
@@ -30,7 +33,7 @@ namespace Ivory.Soap
             }
         }
 
-        /// <summary>Initializes a new instance of the<see cref="SoapContent{TContent}"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="SoapContent{TContent}"/> class.</summary>
         /// <param name="content">
         /// The items to add.
         /// </param>

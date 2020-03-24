@@ -8,6 +8,7 @@ namespace Ivory.Soap
     /// <summary>SOAP XML helper class.</summary>
     internal static class SoapXml
     {
+        /// <summary>An empty <see cref="XmlSerializerNamespaces"/>.</summary>
         internal static readonly XmlSerializerNamespaces Empty = new XmlQualifiedNameCollection()
             .Add(string.Empty, null)
             .ToSerializerNamespaces();

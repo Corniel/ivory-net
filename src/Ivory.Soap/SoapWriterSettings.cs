@@ -11,10 +11,13 @@ namespace Ivory.Soap
             .Add("soap", "http://schemas.xmlsoap.org/soap/envelope/")
             .Add(string.Empty, null);
 
-        /// <summary>Gets and sets the SOAP encoding style.</summary>
+        /// <summary>Gets or sets the SOAP encoding style.</summary>
         public string EncodingStyle { get; set; } = "http://schemas.xmlsoap.org/soap/encoding/";
 
         /// <summary>Gets the <see cref="SoapWriterSettings"/> from the controller if available.</summary>
+        /// <param name="controller">
+        /// The ASP.NET Core controller.
+        /// </param>
         public static SoapWriterSettings FromController(object controller)
         {
             return controller is ISoapController soapController
