@@ -1,0 +1,7 @@
+<xxx:Envelope encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xxx="http://schemas.xmlsoap.org/soap/envelope/">
+  <xxx:Body>
+    <SimpleBody>
+      <Value>17</Value>
+    </SimpleBody>
+  </xxx:Body>
+</xxx:Envelope>

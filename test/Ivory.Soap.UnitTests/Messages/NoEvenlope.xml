@@ -1,0 +1,12 @@
+﻿<NoEnvelope>
+  <Header>
+    <SimpleHeader>
+      <Message>No SOAP header</Message>
+    </SimpleHeader>
+  </Header>
+  <Body>
+    <SimpleBody>
+      <Value>-1</Value>
+    </SimpleBody>
+  </Body>
+</NoEnvelope>

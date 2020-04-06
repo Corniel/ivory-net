@@ -1,0 +1,12 @@
+﻿<Envelope>
+  <Header>
+    <SimpleHeader>
+      <Message>Ivory.NET</Message>
+    </SimpleHeader>
+  </Header>
+  <Body>
+    <SimpleBody>
+      <Value>42</Value>
+    </SimpleBody>
+  </Body>
+</Envelope>

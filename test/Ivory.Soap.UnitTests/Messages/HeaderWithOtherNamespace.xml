@@ -1,0 +1,12 @@
+﻿<Envelope xmlns="http://www.w3.org/2003/05/soap-envelope">
+  <h:Header xmlns:h="http://www.w3.org/2003/05/soap-envelope-alternative">
+    <SimpleHeader>
+      <Message>No SOAP header</Message>
+    </SimpleHeader>
+  </h:Header>
+  <Body>
+    <SimpleBody>
+      <Value>314</Value>
+    </SimpleBody>
+  </Body>
+</Envelope>
