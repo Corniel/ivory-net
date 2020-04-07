@@ -1,0 +1,7 @@
+﻿<document>
+  <test>
+    <content>Should be skipped</content>
+    <content>Should be skipped 2</content>
+  </test>
+  <result>Should stay</result>
+</document>
