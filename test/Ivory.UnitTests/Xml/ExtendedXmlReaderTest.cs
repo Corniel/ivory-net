@@ -11,7 +11,7 @@ namespace Ivory.UnitTests.Xml
     {
 
         [Test]
-        public void Test()
+        public void Extend_SkipComments_XmlWithoutComments()
         {
             using var reader = Message.EmbeddedReader("XmlReader.SkipComments.xml")
                 .Extend(XmlReadExtensions.SkipComments);
