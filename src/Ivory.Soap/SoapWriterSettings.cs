@@ -1,5 +1,5 @@
 ﻿using Ivory.Soap.Mvc;
-using Ivory.Soap.Xml;
+using Ivory.Xml;
 
 namespace Ivory.Soap
 {

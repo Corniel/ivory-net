@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Ivory.Soap\Ivory.Soap.csproj" />
+    <ProjectReference Include="..\Ivory.TestModels\Ivory.TestModels.csproj" />
   </ItemGroup>
 
 </Project>
