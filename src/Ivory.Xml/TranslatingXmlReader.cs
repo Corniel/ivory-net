@@ -34,6 +34,35 @@ namespace Ivory.Xml
             }
         }
 
+        /// <inheritdoc/>
+        public override bool Read()
+        {
+            return reader.Read() && SkipRead();
+        }
+
+        protected virtual bool SkipRead()
+        {
+            var skip = XNodeMatch.Element(localName: "TD", @namespace: null);
+
+            if(!skip.Matches(this))
+            {
+                return true;
+            }
+
+            var end = XNodeMatch.EndElement(skip.LocalName, skip.Namespace);
+
+            bool notEOF;
+
+            do
+            {
+                notEOF = reader.Read();
+            }
+            while (notEOF && !end.Matches(this));
+
+            return notEOF;
+        }
+
+
         #region Via this.reader
 
         /// <inheritdoc/>
@@ -92,9 +121,6 @@ namespace Ivory.Xml
 
         /// <inheritdoc/>
         public override bool MoveToNextAttribute() => reader.MoveToNextAttribute();
-
-        /// <inheritdoc/>
-        public override bool Read() => reader.Read();
 
         /// <inheritdoc/>
         public override bool ReadAttributeValue() => reader.ReadAttributeValue();
