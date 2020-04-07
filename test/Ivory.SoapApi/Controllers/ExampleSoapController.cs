@@ -1,6 +1,6 @@
 ﻿using Ivory.Soap;
 using Ivory.Soap.Mvc;
-using Ivory.SoapApi.Models;
+using Ivory.TestModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Xml.Linq;

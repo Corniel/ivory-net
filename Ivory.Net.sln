@@ -21,9 +21,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rules", "rules", "{3B0D6542
 		rules\production.ruleset = rules\production.ruleset
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivory.Soap.UnitTests", "test\Ivory.Soap.UnitTests\Ivory.Soap.UnitTests.csproj", "{8900281D-E22F-4659-8122-7F52470FA5C7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivory.SoapApi", "test\Ivory.SoapApi\Ivory.SoapApi.csproj", "{FD7210A5-0DDA-487E-9422-D3C4A6E62A07}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivory.Xml", "src\Ivory.Xml\Ivory.Xml.csproj", "{60352C13-FF16-44EE-AFD2-352E82899DE8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivory.UnitTests", "test\Ivory.UnitTests\Ivory.UnitTests.csproj", "{76C591B4-9088-4185-8D49-0ED0946C12AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DBC92D2A-4298-41D9-8F7D-2A2C23F13387}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivory.TestModels", "test\Ivory.TestModels\Ivory.TestModels.csproj", "{9C52862B-8407-4A05-8CD8-D84387584823}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,20 +41,31 @@ Global
 		{17F61465-A966-4A30-A069-5AEAA58E50FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F61465-A966-4A30-A069-5AEAA58E50FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F61465-A966-4A30-A069-5AEAA58E50FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8900281D-E22F-4659-8122-7F52470FA5C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8900281D-E22F-4659-8122-7F52470FA5C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8900281D-E22F-4659-8122-7F52470FA5C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8900281D-E22F-4659-8122-7F52470FA5C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FD7210A5-0DDA-487E-9422-D3C4A6E62A07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD7210A5-0DDA-487E-9422-D3C4A6E62A07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD7210A5-0DDA-487E-9422-D3C4A6E62A07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD7210A5-0DDA-487E-9422-D3C4A6E62A07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60352C13-FF16-44EE-AFD2-352E82899DE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60352C13-FF16-44EE-AFD2-352E82899DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60352C13-FF16-44EE-AFD2-352E82899DE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60352C13-FF16-44EE-AFD2-352E82899DE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C591B4-9088-4185-8D49-0ED0946C12AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C591B4-9088-4185-8D49-0ED0946C12AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C591B4-9088-4185-8D49-0ED0946C12AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C591B4-9088-4185-8D49-0ED0946C12AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C52862B-8407-4A05-8CD8-D84387584823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C52862B-8407-4A05-8CD8-D84387584823}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C52862B-8407-4A05-8CD8-D84387584823}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C52862B-8407-4A05-8CD8-D84387584823}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3B0D6542-B1D6-49AB-A5F6-4D81852D1D2F} = {C7347E79-31B5-474A-9E21-D6919971E9C0}
+		{FD7210A5-0DDA-487E-9422-D3C4A6E62A07} = {DBC92D2A-4298-41D9-8F7D-2A2C23F13387}
+		{76C591B4-9088-4185-8D49-0ED0946C12AF} = {DBC92D2A-4298-41D9-8F7D-2A2C23F13387}
+		{9C52862B-8407-4A05-8CD8-D84387584823} = {DBC92D2A-4298-41D9-8F7D-2A2C23F13387}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {368DE833-5DFE-4BB1-B960-554997C30DF0}

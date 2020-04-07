@@ -17,13 +17,17 @@
 		<Description>SOAP for .NET Core 3.1</Description>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Include="..\..\shared\Guard.cs" Link="Guard.cs" />
+	</ItemGroup>
+
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.5.0.15942">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.6.0.16497">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -34,14 +38,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Ivory.Xml\Ivory.Xml.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="SoapMessages.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>SoapMessages.resx</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <EmbeddedResource Update="SoapMessages.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>SoapMessages.Designer.cs</LastGenOutput>

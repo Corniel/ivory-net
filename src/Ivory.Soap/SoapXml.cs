@@ -1,4 +1,4 @@
-﻿using Ivory.Soap.Xml;
+﻿using Ivory.Xml;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
