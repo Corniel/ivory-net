@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Xml;
 
 namespace Ivory.UnitTests.TestTools
 {
@@ -12,6 +13,8 @@ namespace Ivory.UnitTests.TestTools
             return typeof(Message).Assembly
                 .GetManifestResourceStream($"Ivory.UnitTests.Messages.{name}");
         }
+
+        public static XmlReader EmbeddedReader(string name)=> XmlReader.Create(Embedded(name));
 
         public static string EmbeddedText(string name)
         {

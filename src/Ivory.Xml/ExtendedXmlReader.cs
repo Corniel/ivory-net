@@ -9,7 +9,7 @@ namespace Ivory.Xml
         private readonly XmlReader reader;
 
         internal readonly List<XmlReaderCursorTransform> CursorTransforms = new List<XmlReaderCursorTransform>();
-        internal readonly List<XmlReadExtension> ReadExtensions = new List<XmlReadExtension>();
+        internal readonly List<IXmlReadExtension> ReadExtensions = new List<IXmlReadExtension>();
 
         /// <summary>Initializes a new instance of the <see cref="ExtendedXmlReader"/> class.</summary>
         /// <param name="reader">
@@ -18,21 +18,24 @@ namespace Ivory.Xml
         internal ExtendedXmlReader(XmlReader reader) => this.reader = reader;
 
         /// <summary>Gets the (potential translated) local name.</summary>
-        public override string LocalName => Transform().LocalName;
+        public override string LocalName
+        {
+            get => CursorTransforms.Any() ? Current().LocalName : reader.LocalName;
+        }
 
         /// <summary>Gets the (potential translated) namespace URI.</summary>
-        public override string NamespaceURI => Transform().Namespace;
-
-        /// <inheritdoc/>
-        public override bool Read() => reader.Read() && ReadExtensions.All(read => read(this));
-
-        private XmlReaderCursor Transform()
+        public override string NamespaceURI
         {
-            var current = this.Current();
+            get => CursorTransforms.Any() ? Current().Namespace : reader.NamespaceURI;
+        }
 
+        /// <summary>Gets the current <see cref="XmlReaderCursor"/>.</summary>
+        private XmlReaderCursor Current()
+        {
+            var current = new XmlReaderCursor(Depth, reader.LocalName, reader.NamespaceURI, reader.NodeType);
             foreach (var transform in CursorTransforms)
             {
-                if (transform(current, out XmlReaderCursor transformed))
+                if (transform(current, out var transformed))
                 {
                     return transformed;
                 }
@@ -40,6 +43,9 @@ namespace Ivory.Xml
 
             return current;
         }
+
+        /// <inheritdoc/>
+        public override bool Read() => reader.Read() && ReadExtensions.All(extension => extension.Extend(reader));
 
         #region Via this.reader
 
