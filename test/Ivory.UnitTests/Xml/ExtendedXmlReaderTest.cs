@@ -31,24 +31,37 @@ namespace Ivory.UnitTests.Xml
         {
             using var reader = Message.EmbeddedReader("StrictOrder.xml");
 
+            var root = new XmlRootAttribute("StrictOrder2");
+
             var overrides = new XmlAttributeOverrides();
             
             foreach(var prop in typeof(StrictOrder).GetProperties())
             {
                 var attributes = new XmlAttributes();
-                var attr = new XmlElementAttribute(prop.Name, prop.PropertyType);
+                var attr = new XmlElementAttribute(prop.Name, prop.PropertyType) {/* Order = -1, no order */ };
                 attributes.XmlElements.Add(attr);
                 overrides.Add(prop.DeclaringType, prop.Name, attributes);
             }
-            
-        
-            var serializer = new XmlSerializer(typeof(StrictOrder), overrides);
+                    
+            var serializer = new XmlSerializer(typeof(StrictOrder), overrides, Array.Empty<Type>(), root, "");
+            serializer.UnknownNode += onUnknownNode;
+            serializer.UnknownElement += Serializer_UnknownElement;
 
             var model = (StrictOrder)serializer.Deserialize(reader);
 
             Assert.AreEqual("What's in it?", model.Name);
             Assert.AreEqual(666, model.Value);
             Assert.AreEqual("extra", model.Extra);
+        }
+
+        private void Serializer_UnknownElement(object sender, XmlElementEventArgs e)
+        {
+            
+        }
+
+        private void onUnknownNode(object sender, XmlNodeEventArgs e)
+        {
+           
         }
     }
 

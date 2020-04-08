@@ -1,5 +1,6 @@
-﻿<StrictOrder>
+﻿<StrictOrder2>
   <Extra>extra</Extra>
   <Value>666</Value>
+  <Missing>Not int there</Missing>
   <Name>What's in it?</Name>
-</StrictOrder>
+</StrictOrder2>
