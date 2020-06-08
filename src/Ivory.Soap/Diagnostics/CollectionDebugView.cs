@@ -6,7 +6,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Ivory.Xml.Diagnostics
+namespace Ivory.Soap.Diagnostics
 {
     /// <summary>Allows the debugger to display collections.</summary>
     internal class CollectionDebugView
