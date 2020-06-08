@@ -38,10 +38,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Ivory.Xml\Ivory.Xml.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Compile Update="SoapMessages.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>

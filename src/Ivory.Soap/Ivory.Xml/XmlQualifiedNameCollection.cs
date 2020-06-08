@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Ivory.Soap.Diagnostics;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Ivory.Xml
 {
     /// <summary>Represents a collection of unique <see cref="XmlQualifiedName"/>'s.</summary>
     [DebuggerDisplay("Count: {Count}")]
-    [DebuggerTypeProxy(typeof(Diagnostics.CollectionDebugView))]
+    [DebuggerTypeProxy(typeof(CollectionDebugView))]
     public class XmlQualifiedNameCollection : ISet<XmlQualifiedName>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
