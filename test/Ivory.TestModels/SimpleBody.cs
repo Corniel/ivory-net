@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Ivory.TestModels
+namespace Ivory.TestModels;
+
+[Serializable]
+public class SimpleBody
 {
-    [Serializable]
-    public class SimpleBody
-    {
-        public int Value { get; set; }
-    }
+    public int Value { get; set; }
 }

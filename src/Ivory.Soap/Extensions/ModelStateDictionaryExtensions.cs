@@ -2,23 +2,22 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 
-namespace Ivory.Soap.Extensions
+namespace Ivory.Soap.Extensions;
+
+/// <summary>Extensions on the <see cref="ModelStateDictionary"/>.</summary>
+internal static class ModelStateDictionaryExtensions
 {
-    /// <summary>Extensions on the <see cref="ModelStateDictionary"/>.</summary>
-    internal static class ModelStateDictionaryExtensions
+    /// <summary>Get all <see cref="BindingError"/>'s from the mode state.</summary>
+    /// <param name="modelState">
+    /// The model state.
+    /// </param>
+    public static IEnumerable<BindingError> GetErrors(this ModelStateDictionary modelState)
     {
-        /// <summary>Get all <see cref="BindingError"/>'s from the mode state.</summary>
-        /// <param name="modelState">
-        /// The model state.
-        /// </param>
-        public static IEnumerable<BindingError> GetErrors(this ModelStateDictionary modelState)
+        foreach (var kvp in modelState)
         {
-            foreach (var kvp in modelState)
+            foreach (var error in kvp.Value.Errors)
             {
-                foreach (var error in kvp.Value.Errors)
-                {
-                    yield return new BindingError(kvp.Key, error.ErrorMessage);
-                }
+                yield return new BindingError(kvp.Key, error.ErrorMessage);
             }
         }
     }

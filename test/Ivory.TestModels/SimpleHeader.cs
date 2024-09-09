@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Ivory.TestModels
+namespace Ivory.TestModels;
+
+[Serializable]
+public class SimpleHeader
 {
-    [Serializable]
-    public class SimpleHeader
-    {
-        public string Message { get; set; }
-    }
+    public string Message { get; set; }
 }

@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Ivory.UnitTests.Mocking
+namespace Ivory.UnitTests.Mocking;
+
+public class ActionContextStub : ActionContext
 {
-    public class ActionContextStub : ActionContext
+    public ActionContextStub()
     {
-        public ActionContextStub()
-        {
-            HttpContext = new HttpContextStub();
-        }
+        HttpContext = new HttpContextStub();
     }
 }

@@ -1,52 +1,52 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>0.0.1</Version>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Version>0.0.1</Version>
     <IsPackable>true</IsPackable>
-		<CodeAnalysisRuleSet>..\..\Ivory.Net.ruleset</CodeAnalysisRuleSet>
-		<Authors>Jack Kester, Corniel Nobel</Authors>
-		<Product>Ivory.NET SOAP</Product>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <CodeAnalysisRuleSet>..\..\Ivory.Net.ruleset</CodeAnalysisRuleSet>
+    <Authors>Jack Kester, Corniel Nobel</Authors>
+    <Product>Ivory.NET SOAP</Product>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Ivory.Net.Soap</PackageId>
     <PackageTags>ASP.NET Core SOAP</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
-		<Copyright>Copyright © 2020-current Jack Kester &amp; Corniel Nobel</Copyright>
-		<Description>SOAP for .NET Core 3.1</Description>
-	</PropertyGroup>
+    <Copyright>Copyright © 2020-current Jack Kester &amp; Corniel Nobel</Copyright>
+    <Description>SOAP for .NET Core</Description>
+  </PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Include="..\..\shared\Guard.cs" Link="Guard.cs" />
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../shared/Guard.cs" Link="Guard.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.6.0.16497">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <Compile Update="SoapMessages.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>SoapMessages.resx</DependentUpon>
-	  </Compile>
-	  <EmbeddedResource Update="SoapMessages.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>SoapMessages.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
-	</ItemGroup>
+  <ItemGroup Label="Analyzers">
+    <PackageReference Include="AsyncFixer" Version="*" PrivateAssets="all" />
+    <PackageReference Include="DotNetProjectFile.Analyzers" Version="*" PrivateAssets="all" />
+    <PackageReference Include="IDisposableAnalyzers" Version="*" PrivateAssets="all" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="*" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="*-*" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="SoapMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SoapMessages.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="SoapMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SoapMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 
 </Project>

@@ -2,16 +2,15 @@
 using NUnit.Framework;
 using System.Linq;
 
-namespace Ivory.UnitTests.TestTools
+namespace Ivory.UnitTests.TestTools;
+
+public static class ModelBindAssert
 {
-    public static class ModelBindAssert
+    public static TModel Success<TModel>(ModelBindingResult result)
+        where TModel : class
     {
-        public static TModel Success<TModel>(ModelBindingResult result)
-            where TModel : class
-        {
-            var model = result.Model as TModel;
-            Assert.NotNull(model);
-            return model;
-        }
+        var model = result.Model as TModel;
+        Assert.NotNull(model);
+        return model;
     }
 }
