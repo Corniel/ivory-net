@@ -14,7 +14,7 @@ namespace Ivory.Xml;
 public class XmlQualifiedNameCollection : ISet<XmlQualifiedName>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly HashSet<XmlQualifiedName> collection = new HashSet<XmlQualifiedName>();
+    private readonly HashSet<XmlQualifiedName> collection = new();
 
     /// <inheritdoc/>
     public int Count => collection.Count;

@@ -6,13 +6,13 @@ namespace Ivory.Soap.Modelbinding;
 public class SoapBindingSource : BindingSource
 {
     /// <summary>A <see cref="SoapBindingSource"/> for the SOAP envelope.</summary>
-    public static readonly SoapBindingSource SoapEnvelope = new SoapBindingSource(nameof(SoapEnvelope), "SOAP envelope");
+    public static readonly SoapBindingSource SoapEnvelope = new(nameof(SoapEnvelope), "SOAP envelope");
 
     /// <summary>A <see cref="SoapBindingSource"/> for the SOAP header.</summary>
-    public static readonly SoapBindingSource SoapHeader = new SoapBindingSource(nameof(SoapHeader), "SOAP header");
+    public static readonly SoapBindingSource SoapHeader = new(nameof(SoapHeader), "SOAP header");
 
     /// <summary>A <see cref="SoapBindingSource"/> for the SOAP body.</summary>
-    public static readonly SoapBindingSource SoapBody = new SoapBindingSource(nameof(SoapBody), "SOAP body");
+    public static readonly SoapBindingSource SoapBody = new(nameof(SoapBody), "SOAP body");
 
     /// <summary>Initializes a new instance of the <see cref="SoapBindingSource"/> class.</summary>
     /// <param name="id">

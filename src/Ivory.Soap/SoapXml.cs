@@ -14,7 +14,7 @@ internal static class SoapXml
         .ToSerializerNamespaces();
 
     /// <summary>Gets the <see cref="XmlWriterSettings"/> to write SOAP with.</summary>
-    internal static readonly XmlWriterSettings WriterSettings = new XmlWriterSettings
+    internal static readonly XmlWriterSettings WriterSettings = new()
     {
         OmitXmlDeclaration = true,
         NamespaceHandling = NamespaceHandling.OmitDuplicates,
@@ -27,7 +27,7 @@ internal static class SoapXml
     };
 
     /// <summary>Gets the <see cref="XmlReaderSettings"/> to read SOAP with.</summary>
-    internal static readonly XmlReaderSettings ReaderSettings = new XmlReaderSettings
+    internal static readonly XmlReaderSettings ReaderSettings = new()
     {
         Async = false,
     };
